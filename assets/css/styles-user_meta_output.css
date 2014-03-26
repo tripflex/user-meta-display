@@ -1,0 +1,44 @@
+#user-meta-output-box {
+  position: relative;
+}
+
+#user-meta-output-box table {
+  text-align: left;
+}
+#user-meta-output-box table .key-column {
+
+}
+#user-meta-output-box table .value-column {
+  display: inline-block;
+}
+#user-meta-output-box table td {
+  padding: 0px;
+}
+#user-meta-output-box table th {
+  padding: 1px;
+}
+#user-meta-output-box code {
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+.user-meta-display-settings-config-content {
+	width: auto !important;
+}
+.user-meta-display-settings-config-content .user-meta-display_settings_label {
+	font-size: 20px;
+	margin-bottom: 5px;
+}
+.user-meta-display-settings-config-content label[for=field_user_list_0]{
+	margin-right: 20px;
+	margin-top: 5px;
+}
+.user-meta-display-settings-config-content label[for=field_user_meta_output_0]{
+	border-bottom: 1px solid #eee;
+	width: 100%;
+}
+.wrap .submit {
+	display: none;
+}

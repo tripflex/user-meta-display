@@ -38,6 +38,7 @@ $group = array(
 	),
 	'styles'	=> array(
 		'toggles.css',
+		'styles-user_meta_output.css',
 	),
 	'scripts'	=> array(
 		'toggles.min.js',
