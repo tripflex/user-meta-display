@@ -19,7 +19,7 @@ class User_Meta_Display {
 	/**
 	 * @var     string
 	 */
-	const VERSION = '1.00';
+	const VERSION = '1.1';
 	/**
 	 * @var      string
 	 */
