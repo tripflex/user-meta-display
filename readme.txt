@@ -1,17 +1,17 @@
 === User Meta Display ===
 Contributors: tripflex
 Donate link: https://www.gittip.com/tripflex
-Tags: user, meta, user meta, display, output, show, users, ajax
+Tags: user, meta, user meta, display, output, show, users, ajax, jquery, display name, id, user login
 Requires at least: 3.8
 Tested up to: 3.8
-Stable tag: 1.0
+Stable tag: 1.1.1
 License: GPLv3
 
-Simple plugin that will allow you to view all user meta by selecting a user from a dropdown list.
+Simple and clean plugin that will show user meta with ajax by selecting the user from a dropdown list. Ajax dropdown list by User Login, ID, or Display Name.
 
 == Description ==
 
-This is a simple Wordpress plugin that will allow you to display all meta associated with a user by selecting from a dropdown list.
+This is a simple and clean Wordpress plugin that will allow you to display all meta associated with a user by selecting from a dropdown list. You can select how the display list will show the users, by Display Name, User Login, or ID. Default is Display Name.
 
 This plugin will create a submenu "User Meta Display" item under the "Users" menu item in your wordpress installation.
 
@@ -57,5 +57,16 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.1.1 =
+- March 25, 2014 -
+* fix missing css files
+
+= 1.1 = 
+- March 25, 2014 -
+* Add Ajax loading
+* Select user by ID, Display Name, or User Login
+* Removed old non-used code
+
+= 1.0.0 = 
+- March 17, 2014 -
 * Initial Creation
