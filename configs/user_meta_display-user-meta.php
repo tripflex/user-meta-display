@@ -13,9 +13,16 @@
 
 $group = array(
 	'label' => __('User Meta','user-meta-display'),
-	'id' => '102921112',
-	'master' => 'user_to_display',
+	'id' => '13774015',
+	'master' => 'user_list',
 	'fields' => array(
+		'user_list'	=>	array(
+			'label'		=> 	__('User List','user-meta-display'),
+			'caption'	=>	__('How should the dropdown list the users?','user-meta-display'),
+			'type'		=>	'onoff',
+			'default'	=> 	'1||ID,2||User Login,*3||Display Name',
+			'inline'	=> 	true,
+		),
 		'user_to_display'	=>	array(
 			'label'		=> 	__('User Meta to Display','user-meta-display'),
 			'caption'	=>	__('User to display meta data for','user-meta-display'),
@@ -29,8 +36,11 @@ $group = array(
 			'default'	=> 	'EL53277177D8B52',
 		),
 	),
+	'styles'	=> array(
+		'toggles.css',
+	),
 	'scripts'	=> array(
-		'scripts-user_meta_output.js',
+		'toggles.min.js',
 	),
 	'multiple'	=> false,
 );

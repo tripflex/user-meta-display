@@ -7,32 +7,6 @@
 */
 /* {margin:0;padding:0;}*/
 
-#user-meta-output-box {
-  position: relative;
-}
-
-#user-meta-output-box table {
-  text-align: left;
-}
-#user-meta-output-box table .key-column {
-
-}
-#user-meta-output-box table .value-column {
-  display: inline-block;
-}
-#user-meta-output-box table td {
-  padding: 0px;
-}
-#user-meta-output-box table th {
-  padding: 1px;
-}
-#user-meta-output-box code {
-  white-space: pre-wrap;       /* css-3 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
 
 .user-meta-display-modal-content {
   background: none repeat scroll 0 0 #FFFFFF;
@@ -57,7 +31,7 @@
   margin-left: 147px;
   background-color: #fff;
   padding-right: 10px;
-/*  width: 450px;*/
+  width: 450px;
   min-height: 200px;
   box-shadow: 1px 1px 1px -1px rgba(0,0,0,.1);
 }
@@ -265,8 +239,7 @@ h3.user-meta-display-config-header{
   width: 99%;
 }
 .user-meta-display-settings-config-content label {
-  margin: 0px 20px 0px 3px;
-  font-weight: bolder;
+  margin: 0 0 3px;
 }
 #side-sortables .user-meta-display-metabox-config-content{
   margin-left: 0;
@@ -577,3 +550,9 @@ img.filepreview {
 .filechanger-btn.user-meta-display_uploader {
     margin-left: 10px;
 }
+
+
+
+
+
+

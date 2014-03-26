@@ -1,0 +1,13 @@
+.toggle-group .button {
+  border-radius: 0;
+  margin-right: -1px;
+}
+.toggle-group .button-primary {
+  margin-right: 0;
+}
+.toggle-group .button:first-child {
+  border-radius: 3px 0 0 3px;
+}
+.toggle-group .button:last-child {
+  border-radius: 0 3px 3px 0;
+}
