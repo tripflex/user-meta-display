@@ -6,7 +6,7 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 ?>
 <script>
 	jQuery(document).ready(function($) {
-		$('#umd_user_list_dropdown select').on('change', function() {
+		$('.user-meta-display-field-row').on('click', '#user', function() {
 			$.ajax(ajaxurl, {
 				type: 'POST',
 				dataType: 'html',
