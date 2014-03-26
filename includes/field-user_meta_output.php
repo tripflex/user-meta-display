@@ -16,7 +16,7 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 					security: '<?php echo $umd_return_raw_data; ?>'
 				},
 				beforeSend: function () {
-					$('#user-meta-output-box').html('<img src="http://www3.travelhealthcare.com/wp-admin/images/spinner.gif">');
+					$('#user-meta-output-box').html('<img src="<?php echo admin_url("images/spinner.gif"); ?>">');
 				},
 				error: function(request, status, error) {
 					$('#user-meta-output-box').html('Error! ' + error);
@@ -37,7 +37,7 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 					security: '<?php echo $umd_change_user_list_dropdown; ?>'
 				},
 				beforeSend: function () {
-					$('#umd_user_list_dropdown').html('<img src="http://www3.travelhealthcare.com/wp-admin/images/spinner.gif">');
+					$('#umd_user_list_dropdown').html('<img src="<?php echo admin_url("images/spinner.gif"); ?>">');
 				},
 				error: function(request, status, error) {
 					$('#umd_user_list_dropdown').html('Error! ' + error);
