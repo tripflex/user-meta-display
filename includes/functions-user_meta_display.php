@@ -1,8 +1,9 @@
 <?php
 add_action( 'wp_ajax_umd_return_raw_data', 'umd_return_raw_data' );
 add_action( 'wp_ajax_umd_change_user_list_dropdown', 'umd_change_user_list_dropdown' );
+add_filter( 'user_row_actions', 'umd_filter_user_row_actions', 10, 2 );
 
-public function filter_user_row_actions( array $actions, WP_User $user ) {
+function umd_filter_user_row_actions( array $actions, WP_User $user ) {
 	// TODO
 	$link = "";
 	$actions['user_meta'] = '<a href="' . $link . '">' . __( 'View Meta', 'user-meta-display' ) . '</a>';
