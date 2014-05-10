@@ -1,7 +1,29 @@
+#umd_refresh_meta_button:before {
+	font-family: "dashicons";
+	content: "\f463";
+	padding-right: 5px;
+	}
+#umd_refresh_dropdown_button:before {
+	font-family: "dashicons";
+	content: "\f463";
+	padding-right: 5px;
+	}
 #user-meta-output-box {
   position: relative;
 }
 
+.user-meta-display-user-dropdown {
+	float: left;
+	margin-right: 5px;
+	}
+
+#umd_refresh_dropdown {
+
+	}
+
+#umd_refresh_meta_button {
+	margin-bottom: 15px;
+	}
 #user-meta-output-box table {
   text-align: left;
 }

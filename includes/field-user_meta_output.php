@@ -30,6 +30,9 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 		$('.user-meta-display-field-row').on('click', '#user', function(){
 			updateUserData($(this).val());
 		});
+		$('#umd_refresh_meta_button').click(function(){
+			updateUserData($('#user').val());
+		});
 
 		$('.user_meta_display-toggle-group-buttons .button').click(function() {
 			$.ajax(ajaxurl, {
@@ -54,6 +57,10 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 		});
 	});
 </script>
+
+<div id="umd_refresh_meta">
+	<a id="umd_refresh_meta_button" class="button" href="#">Refresh User Meta</a>
+</div>
 <div id="user-meta-output-box">
 	Please select a user from above.
 </div>

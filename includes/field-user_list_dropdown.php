@@ -1,5 +1,10 @@
 <div id="umd_user_list_dropdown">
 <?php
+	add_action( 'admin_enqueue_scripts', 'umd_load_wp_dashicons' );
+	function umd_load_wp_dashicons() {
+		wp_enqueue_style( 'dashicons' );
+	}
+
 	$user_args = array(
 		'show_option_none' => 'Select User Display Name',
 		'class' => 'user-meta-display-user-dropdown'
@@ -22,3 +27,7 @@
 	wp_dropdown_users($user_args);
 ?>
 </div>
+<div id="umd_refresh_dropdown">
+	<a id="umd_refresh_dropdown_button" class="button" href="#">Refresh</a>
+</div>
+<div style="clear: both;"></div>
