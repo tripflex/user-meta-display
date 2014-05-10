@@ -5,7 +5,7 @@ $umd_return_raw_data = wp_create_nonce( 'umd_return_raw_data' );
 $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown' );
 ?>
 <script>
-	function updateUserData(user_id){
+	function umdUpdateUserData(user_id){
 		jQuery.ajax(ajaxurl, {
 			type: 'POST',
 			dataType: 'html',
@@ -25,36 +25,44 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 			}
 		});
 	}
+
+	function umdUpdateDropdown(user_list){
+		jQuery.ajax(ajaxurl, {
+			type: 'POST',
+			dataType: 'html',
+			data: {
+				action: 'umd_change_user_list_dropdown',
+				userlist: user_list,
+				security: '<?php echo $umd_change_user_list_dropdown; ?>'
+			},
+			beforeSend: function () {
+				jQuery('#umd_user_list_dropdown').html('<img src="<?php echo admin_url("images/spinner.gif"); ?>">');
+			},
+			error: function(request, status, error) {
+				jQuery('#umd_user_list_dropdown').html('Error! ' + error);
+			},
+			success: function(data) {
+				jQuery('#umd_user_list_dropdown').html(data);
+			}
+		});
+	}
+
 	jQuery(document).ready(function($) {
 
 		$('.user-meta-display-field-row').on('click', '#user', function(){
-			updateUserData($(this).val());
+			umdUpdateUserData($(this).val());
 		});
 		$('#umd_refresh_meta_button').click(function(){
-			updateUserData($('#user').val());
+			umdUpdateUserData($('#user').val());
 		});
-
+		$('#umd_refresh_dropdown_button').click(function(){
+			umdUpdateDropdown($('.user_meta_display-toggle-group-buttons .button').data('value'));
+		});
 		$('.user_meta_display-toggle-group-buttons .button').click(function() {
-			$.ajax(ajaxurl, {
-				type: 'POST',
-				dataType: 'html',
-				data: {
-					action: 'umd_change_user_list_dropdown',
-					userlist: $(this).data('value'),
-					security: '<?php echo $umd_change_user_list_dropdown; ?>'
-				},
-				beforeSend: function () {
-					$('#umd_user_list_dropdown').html('<img src="<?php echo admin_url("images/spinner.gif"); ?>">');
-				},
-				error: function(request, status, error) {
-					$('#umd_user_list_dropdown').html('Error! ' + error);
-				},
-				success: function(data) {
-					$('#umd_user_list_dropdown').html(data);
-				}
-			});
-
+			umdUpdateDropdown($(this).data('value'));
 		});
+
+
 	});
 </script>
 

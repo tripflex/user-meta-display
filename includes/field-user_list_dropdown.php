@@ -18,7 +18,7 @@
 ?>
 		<script>
 			jQuery(function($){
-				updateUserData(<?php echo $GET_user_id; ?>);
+				umdUpdateUserData(<?php echo $GET_user_id; ?>);
 			});
 		</script>
 <?php
