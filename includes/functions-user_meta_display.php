@@ -4,8 +4,7 @@ add_action( 'wp_ajax_umd_change_user_list_dropdown', 'umd_change_user_list_dropd
 add_filter( 'user_row_actions', 'umd_filter_user_row_actions', 10, 2 );
 
 function umd_filter_user_row_actions( array $actions, WP_User $user ) {
-	// TODO
-	$link = "";
+	$link = admin_url( 'users.php?page=user_meta_display' );
 	$actions['user_meta'] = '<a href="' . $link . '">' . __( 'View Meta', 'user-meta-display' ) . '</a>';
 
 	return $actions;
