@@ -56,7 +56,7 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 			umdUpdateUserData($('#user').val());
 		});
 		$('#umd_refresh_dropdown_button').click(function(){
-			umdUpdateDropdown($('.user_meta_display-toggle-group-buttons .button').data('value'));
+			umdUpdateDropdown($('.user_meta_display-toggle-group-buttons .button-primary').data('value'));
 		});
 		$('.user_meta_display-toggle-group-buttons .button').click(function() {
 			umdUpdateDropdown($(this).data('value'));
