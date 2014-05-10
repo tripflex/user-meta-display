@@ -5,13 +5,15 @@
 		'class' => 'user-meta-display-user-dropdown'
 	);
 
+	$GET_user_id = intval($_GET['user_id']);
+
 	// User ID specified through GET
-	if(intval($_GET['user_id'])):
-		$user_args['selected'] = intval($_GET['user_id']);
+	if($GET_user_id):
+		$user_args['selected'] = $GET_user_id;
 ?>
 		<script>
 			jQuery(function($){
-				$('#user').click();
+				updateUserData(<?php echo $GET_user_id; ?>);
 			});
 		</script>
 <?php

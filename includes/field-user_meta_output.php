@@ -5,26 +5,30 @@ $umd_return_raw_data = wp_create_nonce( 'umd_return_raw_data' );
 $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown' );
 ?>
 <script>
+	function updateUserData(user_id){
+		jQuery.ajax(ajaxurl, {
+			type: 'POST',
+			dataType: 'html',
+			data: {
+				action: 'umd_return_raw_data',
+				userid: user_id,
+				security: '<?php echo $umd_return_raw_data; ?>'
+			},
+			beforeSend: function () {
+				jQuery('#user-meta-output-box').html('<img src="<?php echo admin_url("images/spinner.gif"); ?>">');
+			},
+			error: function(request, status, error) {
+				jQuery('#user-meta-output-box').html('Error! ' + error);
+			},
+			success: function(data) {
+				jQuery('#user-meta-output-box').html(data);
+			}
+		});
+	}
 	jQuery(document).ready(function($) {
-		$('.user-meta-display-field-row').on('click', '#user', function() {
-			$.ajax(ajaxurl, {
-				type: 'POST',
-				dataType: 'html',
-				data: {
-					action: 'umd_return_raw_data',
-					userid: $(this).val(),
-					security: '<?php echo $umd_return_raw_data; ?>'
-				},
-				beforeSend: function () {
-					$('#user-meta-output-box').html('<img src="<?php echo admin_url("images/spinner.gif"); ?>">');
-				},
-				error: function(request, status, error) {
-					$('#user-meta-output-box').html('Error! ' + error);
-				},
-				success: function(data) {
-					$('#user-meta-output-box').html(data);
-				}
-			});
+
+		$('.user-meta-display-field-row').on('click', '#user', function(){
+			updateUserData($(this).val());
 		});
 
 		$('.user_meta_display-toggle-group-buttons .button').click(function() {
