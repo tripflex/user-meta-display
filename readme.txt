@@ -76,7 +76,7 @@ The manual installation method involves downloading the plugin and uploading it 
 - March 25, 2014 -
 * fix missing css files
 
-= 1.1 = 
+= 1.1.0 = 
 - March 25, 2014 -
 * Add Ajax loading
 * Select user by ID, Display Name, or User Login

@@ -77,7 +77,7 @@ User Meta Display Output
 - March 25, 2014 -
 * fix missing css files
 
-### 1.1 ### 
+### 1.1.0 ### 
 - March 25, 2014 -
 * Add Ajax loading
 * Select user by ID, Display Name, or User Login
