@@ -26,13 +26,14 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 		});
 	}
 
-	function umdUpdateDropdown(user_list){
+	function umdUpdateDropdown(user_list, user_id){
 		jQuery.ajax(ajaxurl, {
 			type: 'POST',
 			dataType: 'html',
 			data: {
 				action: 'umd_change_user_list_dropdown',
 				userlist: user_list,
+				userid: user_id,
 				security: '<?php echo $umd_change_user_list_dropdown; ?>'
 			},
 			beforeSend: function () {
@@ -50,16 +51,27 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 	jQuery(document).ready(function($) {
 
 		$('.user-meta-display-field-row').on('click', '#user', function(){
-			umdUpdateUserData($(this).val());
+			var user_id = $(this).val();
+			if(user_id != -1){
+				umdUpdateUserData(user_id);
+			}
 		});
 		$('#umd_refresh_meta_button').click(function(){
-			umdUpdateUserData($('#user').val());
+			var user_id = $('#user').val();
+			if(user_id != -1){
+				umdUpdateUserData(user_id);
+			}
 		});
 		$('#umd_refresh_dropdown_button').click(function(){
-			umdUpdateDropdown($('.user_meta_display-toggle-group-buttons .button-primary').data('value'));
+			var viewBy = $('.user_meta_display-toggle-group-buttons .button-primary').data('value');
+			var user_id = $('#user').val();
+			umdUpdateDropdown(viewBy, user_id);
 		});
 		$('.user_meta_display-toggle-group-buttons .button').click(function() {
-			umdUpdateDropdown($(this).data('value'));
+			var viewBy = $(this).data('value');
+			var user_id = $('#user').val();
+			console.log('user_id: ' + user_id);
+			umdUpdateDropdown(viewBy, user_id);
 		});
 
 

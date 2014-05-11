@@ -63,7 +63,7 @@ The manual installation method involves downloading the plugin and uploading it 
 
 ## Screenshots ##
 
-![](screenshot-1.png)
+![](screenshot-1.gif)
 User Meta Display Output
 
 ## Changelog ##

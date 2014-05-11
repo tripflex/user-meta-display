@@ -12,7 +12,7 @@ function umd_filter_user_row_actions( array $actions, WP_User $user ) {
 function umd_return_raw_data(){
 	check_ajax_referer( 'umd_return_raw_data', 'security' );
 	$user_id = intval($_POST['userid']);
-	if ($user_id) {
+	if ($user_id && $user_id != -1) {
 		$found_user_meta = get_user_meta($user_id);
 		if($found_user_meta){
 			echo '<table>
@@ -45,18 +45,27 @@ function umd_change_user_list_dropdown() {
 	check_ajax_referer( 'umd_change_user_list_dropdown', 'security' );
 	
 	$user_list_type = intval($_POST['userlist']);
-	
+
 	if ($user_list_type){
+
+		$POST_userid = intval($_POST['userid']);
+		$user_args = array();
+
 		if ($user_list_type == 1) {
 			// ID
-			wp_dropdown_users(array('show' => 'ID', 'show_option_none' => 'Select User ID', 'class' => 'user-meta-display-user-dropdown'));
+			$user_args = array('show' => 'ID', 'show_option_none' => 'Select User ID', 'class' => 'user-meta-display-user-dropdown');
 		} elseif ($user_list_type == 2){
 			// User Login
-			wp_dropdown_users(array('show' => 'user_login', 'show_option_none' => 'Select User Login', 'class' => 'user-meta-display-user-dropdown'));
+			$user_args = array('show' => 'user_login', 'show_option_none' => 'Select User Login', 'class' => 'user-meta-display-user-dropdown');
 		} elseif ($user_list_type == 3){
 			// Display Name
-			wp_dropdown_users(array('show' => 'display_name', 'show_option_none' => 'Select User Display Name', 'class' => 'user-meta-display-user-dropdown'));
+			$user_args = array('show' => 'display_name', 'show_option_none' => 'Select User Display Name', 'class' => 'user-meta-display-user-dropdown');
 		}
+
+		if($POST_userid) $user_args['selected'] = $POST_userid;
+
+		wp_dropdown_users($user_args);
+
 		die;
 	}
 }
