@@ -8,6 +8,16 @@
 	content: "\f463";
 	padding-right: 5px;
 	}
+
+/*.key-column:before {*/
+	/*font-family: "dashicons";*/
+	/*content: "\f153";*/
+	/*}*/
+
+.umd-meta-row:hover {
+	background-color: #ccc;
+	}
+
 #user-meta-output-box {
   position: relative;
 }
@@ -31,7 +41,9 @@
 
 }
 #user-meta-output-box table .value-column {
-  display: inline-block;
+	display: inline-block;
+	width: 100%;
+	word-break: break-all;
 }
 #user-meta-output-box table td {
   padding: 0px;
