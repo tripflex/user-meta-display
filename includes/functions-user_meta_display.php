@@ -15,7 +15,27 @@ function umd_return_raw_data(){
 	if ($user_id && $user_id != -1) {
 		$found_user_meta = get_user_meta($user_id);
 		if($found_user_meta){
-			echo '<table>
+			?>
+			<script>
+				jQuery(function($){
+					$('.umd-meta-row').mouseenter(function(){
+						var metakey = $(this).data('metakey');
+						var metakey_class = '.umd-metakey-' + metakey;
+						$(metakey_class + ' .umd-remove-button').removeClass('hidden');
+						$(metakey_class + ' .umd-edit-button').removeClass('hidden');
+					}).mouseleave(function(){
+						var metakey = $(this).data('metakey');
+						var metakey_class = '.umd-metakey-' + metakey;
+						$(metakey_class + ' .umd-remove-button').addClass('hidden');
+						$(metakey_class + ' .umd-edit-button').addClass('hidden');
+					});
+					$('.umd-remove-button').click(function(){
+
+					})
+				});
+			</script>
+			<?php
+			echo '<table class="form-table">
 				<thead>
 					<tr>
 						<th class="key-column">Key</th>
@@ -28,8 +48,8 @@ function umd_return_raw_data(){
 						continue;
 				foreach( $values as $value ) :
 						$value = var_export( $value, true );
-				echo '<tr>
-					<td class="key-column">' . esc_html( $key ) . '</td>
+				echo '<tr class="umd-meta-row umd-metakey-' . esc_html( $key ) . '" data-metakey="' . esc_html( $key ) . '">
+					<td class="key-column"><a href="#" class="umd-remove-button button button-primary hidden">Remove</a> <a href="#" class="umd-edit-button button hidden">Edit</a>' . esc_html( $key ) . '</td>
 					<td class="value-column"><code>' . esc_html( $value ) . '</code></td>
 				</tr>';
 				endforeach;
