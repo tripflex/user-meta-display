@@ -1,12 +1,22 @@
 <?php
 add_action( 'wp_ajax_umd_return_raw_data', 'umd_return_raw_data' );
 add_action( 'wp_ajax_umd_change_user_list_dropdown', 'umd_change_user_list_dropdown' );
-add_filter( 'user_row_actions', 'umd_filter_user_row_actions', 10, 2 );
+add_action( 'wp_ajax_umd_remove_user_meta', 'umd_remove_user_meta' );
+add_action( 'wp_ajax_umd_edit_user_meta', 'umd_edit_user_meta' );
 
-function umd_filter_user_row_actions( array $actions, WP_User $user ) {
-	$link = admin_url( 'users.php?page=user_meta_display&user_id=' . $user->ID );
-	$actions['user_meta'] = '<a href="' . $link . '">' . __( 'Meta', 'user-meta-display' ) . '</a>';
-	return $actions;
+function umd_remove_user_meta(){
+	check_ajax_referer( 'umd_remove_user_meta', 'security' );
+	$userid = $_POST['userid'];
+	$metakey = $_POST['metakey'];
+	$metavalue = $_POST['metavalue'];
+
+	$results = delete_user_meta( $userid, $metakey, $metavalue );
+
+	if(!$results){
+
+	} else {
+
+	}
 }
 
 function umd_return_raw_data(){
@@ -15,23 +25,89 @@ function umd_return_raw_data(){
 	if ($user_id && $user_id != -1) {
 		$found_user_meta = get_user_meta($user_id);
 		if($found_user_meta){
+			$umd_remove_user_meta = wp_create_nonce( 'umd_remove_user_meta' );
 			?>
 			<script>
 				jQuery(function($){
-					$('.umd-meta-row').mouseenter(function(){
-						var metakey = $(this).data('metakey');
-						var metakey_class = '.umd-metakey-' + metakey;
-						$(metakey_class + ' .umd-remove-button').removeClass('hidden');
-						$(metakey_class + ' .umd-edit-button').removeClass('hidden');
-					}).mouseleave(function(){
-						var metakey = $(this).data('metakey');
-						var metakey_class = '.umd-metakey-' + metakey;
-						$(metakey_class + ' .umd-remove-button').addClass('hidden');
-						$(metakey_class + ' .umd-edit-button').addClass('hidden');
-					});
-					$('.umd-remove-button').click(function(){
 
+					function umdRemoveUserMeta($metakey, $metavalue, user_id){
+						jQuery.ajax(ajaxurl, {
+							type: 'POST',
+							dataType: 'html',
+							data: {
+								action: 'umd_remove_user_meta',
+								userid: user_id,
+								security: '<?php echo $umd_remove_user_meta; ?>'
+							},
+							beforeSend: function () {
+<!--								jQuery('#user-meta-output-box').html('<img src="--><?php //echo admin_url("images/spinner.gif"); ?><!--">');-->
+							},
+							error: function(request, status, error) {
+//								jQuery('#user-meta-output-box').html('Error! ' + error);
+							},
+							success: function(data) {
+//								jQuery('.umd-metakey-' + $metakey).remove();
+								if(data == 1){
+									console.log('Removed!');
+								} else if(data == 0){
+									console.log('Error Removing');
+								} else {
+									console.log('Unknown Error Removing');
+								}
+							}
+						});
+					}
+
+					function umdHideManageButtons(metakey, hide){
+						var metakey_class = '.umd-metakey-' + metakey;
+						if(hide){
+							$(metakey_class + ' .umd-remove-button').addClass('hidden');
+							$(metakey_class + ' .umd-edit-button').addClass('hidden');
+						} else {
+							$(metakey_class + ' .umd-remove-button').removeClass('hidden');
+							$(metakey_class + ' .umd-edit-button').removeClass('hidden');
+						}
+					}
+
+					function umdHideRemoveButtons(metakey, hide){
+						var confirm_class = '.umd-confirm-' + metakey;
+						var cancel_class = '.umd-cancel-' + metakey;
+						if(hide){
+							umdHideManageButtons(metakey, false);
+							$(confirm_class).addClass('hidden');
+							$(cancel_class).addClass('hidden');
+						} else {
+							umdHideManageButtons(metakey, true);
+							$(confirm_class).removeClass('hidden');
+							$(cancel_class).removeClass('hidden');
+						}
+					}
+
+					$('.umd-meta-row').mouseenter(function(){
+						umdHideManageButtons($(this).data('metakey'), false);
+					}).mouseleave(function(){
+						umdHideManageButtons($(this).data('metakey'), true);
+					});
+
+					$('.umd-remove-button').click(function(){
+						var metakey = $(this).data('metakey');
+//						var key_column = '.umd-metakey-' + metakey + ' .key-column';
+						var value_column = '.umd-metakey-' + metakey + ' .value-column';
+//						var kcdata = $(key_column).clone();
+						var vcdata = $(value_column).clone();
+
+						umdHideRemoveButtons($(this).data('metakey'), false);
+						$(value_column).html('Are you sure you want to remove this meta key?');
 					})
+
+					$('.umd-confirm-button').click(function(){
+
+					});
+
+					$('.umd-cancel-button').click(function(){
+
+					});
+
 				});
 			</script>
 			<?php
@@ -49,7 +125,11 @@ function umd_return_raw_data(){
 				foreach( $values as $value ) :
 						$value = var_export( $value, true );
 				echo '<tr class="umd-meta-row umd-metakey-' . esc_html( $key ) . '" data-metakey="' . esc_html( $key ) . '">
-					<td class="key-column"><a href="#" class="umd-remove-button button button-primary hidden">Remove</a> <a href="#" class="umd-edit-button button hidden">Edit</a>' . esc_html( $key ) . '</td>
+					<td class="key-column">
+					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-cancel-' . esc_html( $key ) . ' umd-cancel-button button hidden">Cancel</a>
+					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-confirm-' . esc_html( $key ) . ' umd-confirm-button button button-primary hidden">Yes, Remove!</a>
+					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-remove-' . esc_html( $key ) . ' umd-remove-button button button-primary hidden">Remove</a>
+					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-edit-' . esc_html( $key ) . ' umd-edit-button button hidden">Edit</a>' . esc_html( $key ) . '</td>
 					<td class="value-column"><code>' . esc_html( $value ) . '</code></td>
 				</tr>';
 				endforeach;
@@ -89,4 +169,13 @@ function umd_change_user_list_dropdown() {
 		die;
 	}
 }
+
+add_filter( 'user_row_actions', 'umd_filter_user_row_actions', 10, 2 );
+
+function umd_filter_user_row_actions( array $actions, WP_User $user ) {
+	$link = admin_url( 'users.php?page=user_meta_display&user_id=' . $user->ID );
+	$actions['user_meta'] = '<a href="' . $link . '">' . __( 'Meta', 'user-meta-display' ) . '</a>';
+	return $actions;
+}
+
 ?>

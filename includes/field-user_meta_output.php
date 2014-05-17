@@ -70,10 +70,8 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 		$('.user_meta_display-toggle-group-buttons .button').click(function() {
 			var viewBy = $(this).data('value');
 			var user_id = $('#user').val();
-			console.log('user_id: ' + user_id);
 			umdUpdateDropdown(viewBy, user_id);
 		});
-
 
 	});
 </script>
