@@ -27,6 +27,15 @@
 	background-color: #ccc;
 	border-radius: 5px;
 	padding: 10px;
+	word-break: break-all;
+	word-wrap: break-word;
+	}
+
+.umd-modal-close {
+	position: absolute;
+	right: 5%;
+	top: 5%;
+	cursor: pointer;
 	}
 
 .umd-control-container {

@@ -90,6 +90,7 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 				<a class="button button-hero umd-modal-button-no" href="#">Default No Button</a>
 			</div>
 		</div>
+		<div class="umd-modal-close"><div class="dashicons dashicons-dismiss"></div></div>
 	</div>
 </div>
 <div id="umd_refresh_meta">

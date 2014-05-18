@@ -31,41 +31,18 @@ function umd_return_raw_data(){
 				jQuery(function($){
 
 					function umdRemoveUserMeta(meta_key, meta_value, user_id){
-
-						jQuery.ajax(ajaxurl, {
-							type: 'POST',
-							dataType: 'html',
-							data: {
-								action: 'umd_remove_user_meta',
-								userid: user_id,
-								metakey: meta_key,
-								metavalue: meta_value,
-								security: '<?php echo $umd_remove_user_meta; ?>'
-							},
-							beforeSend: function () {
-<!--								jQuery('#user-meta-output-box').html('<img src="--><?php //echo admin_url("images/spinner.gif"); ?><!--">');-->
-							},
-							error: function(request, status, error) {
-//								jQuery('#user-meta-output-box').html('Error! ' + error);
-							},
-							success: function(data) {
-//								jQuery('.umd-metakey-' + $metakey).remove();
-								if(data == 1){
-									console.log('Removed!');
-								} else if(data == 0){
-									console.log('Error Removing');
-								} else {
-									console.log('Unknown Error Removing');
-								}
-							}
-						});
+						umdShowModalLoader();
+						console.log('removed.');
+						console.log(meta_key);
+						console.log(meta_value);
+						console.log(user_id);
 					}
 
-					function umdModalConfig(title, key, value, yes_button, yes_callback, no_button, no_callback){
+					function umdModalConfig(title, key, value, userid, yes_button, yes_callback, no_button, no_callback){
 						$('.umd-modal-title').html(title);
 						$('.umd-modal-meta-key').html(key);
 						$('.umd-modal-meta-value').html(value);
-						$('.umd-modal-button-yes').html(yes_button).data('metakey', key).data('metavalue', value).click(yes_callback);
+						$('.umd-modal-button-yes').html(yes_button).data('metakey', key).data('metavalue', value).data('userid', userid).click(yes_callback);
 						$('.umd-modal-button-no').html(no_button).click(no_callback);
 					}
 					function umdModalShow(){
@@ -74,8 +51,15 @@ function umd_return_raw_data(){
 					function umdModalHide(){
 						$('.umd-control-container').css('display', 'none');
 					}
-					function umdRemoveMetaConfirmed(key){
+					function umdShowModalLoader(){
+						$('.umd-modal').html('<img src="<?php echo plugins_url( '../assets/images/loader-inverted64.gif' , __FILE__ ); ?>">');
+					}
+					function umdRemoveMetaConfirmed(){
+						var metakey = $(this).data('metakey');
+						var metavalue = $(this).data('metavalue');
+						var userid = $(this).data('userid');
 
+						umdRemoveUserMeta(metakey, metavalue, userid);
 					}
 					function umdHideManageButtons(metakey, hide){
 						var metakey_class = '.umd-metakey-' + metakey;
@@ -110,18 +94,16 @@ function umd_return_raw_data(){
 
 					$('.umd-remove-button').click(function(){
 						var metakey = $(this).data('metakey');
+						var userid = $(this).data('userid');
 						var metavalue = $('.umd-metakey-' + metakey + ' .value-column code').html();
+
 						umdHideRemoveButtons($(this).data('metakey'), false);
-						umdModalConfig('Are you sure you want to remove the user meta below?', metakey, metavalue, 'Yes, remove!', umdRemoveMetaConfirmed, 'No, cancel', umdModalHide);
+						umdModalConfig("<?php echo __('Are you sure you want to remove the user meta below?'); ?>", metakey, metavalue, userid, "<?php echo __('Yes!'); ?>", umdRemoveMetaConfirmed, "<?php echo __('Nope, go back.'); ?>", umdModalHide);
 						umdModalShow();
 					});
 
-					$('.umd-confirm-button').click(function(){
-
-					});
-
-					$('.umd-cancel-button').click(function(){
-
+					$('.umd-modal-close').click(function(){
+						umdModalHide();
 					});
 
 				});
@@ -140,10 +122,10 @@ function umd_return_raw_data(){
 						continue;
 				foreach( $values as $value ) :
 						$value = var_export( $value, true );
-				echo '<tr class="umd-meta-row umd-metakey-' . esc_html( $key ) . '" data-metakey="' . esc_html( $key ) . '">
+				echo '<tr class="umd-meta-row umd-metakey-' . esc_html( $key ) . '" data-metakey="' . esc_html( $key ) . '" data-userid="' . intval( $user_id ) . '">
 					<td class="key-column">
-					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-remove-' . esc_html( $key ) . ' umd-remove-button button button-primary hidden">Remove</a>
-					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-edit-' . esc_html( $key ) . ' umd-edit-button button hidden">Edit</a>' . esc_html( $key ) . '</td>
+					<a href="#" data-userid="' . intval( $user_id ) . '" data-metakey="' . esc_html( $key ) . '" class="umd-remove-' . esc_html( $key ) . ' umd-remove-button button button-primary hidden">Remove</a>
+					<a href="#" data-userid="' . intval( $user_id ) . '" data-metakey="' . esc_html( $key ) . '" class="umd-edit-' . esc_html( $key ) . ' umd-edit-button button hidden">Edit</a>' . esc_html( $key ) . '</td>
 					<td class="value-column"><code>' . esc_html( $value ) . '</code></td>
 				</tr>';
 				endforeach;
