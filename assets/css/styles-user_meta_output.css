@@ -1,3 +1,59 @@
+.umd-modal-title {
+	color: #FFFFFF;
+	font-size: 200%;
+	margin-bottom: 10px;
+	line-height: normal;
+	}
+.umd-modal-meta-key {
+	font-size: 175%;
+	color: #ff0000;
+	margin: 30px 0;
+	}
+.umd-modal-buttons {
+	margin: 10px;
+	}
+
+.umd-modal-buttons > .button {
+	font-size: 120%;
+	text-align: center;
+	width: 40%;
+	}
+
+.umd-modal-meta-value-wrap {
+	margin: 25px;
+	}
+
+.umd-modal-meta-value {
+	background-color: #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	}
+
+.umd-control-container {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	z-index: 99999;
+	display: none;
+	}
+.umd-control-container > .umd-backdrop {
+	background: rgba(0, 0, 0, 0.9);
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	}
+.umd-control-container > .umd-backdrop > .umd-modal {
+	position:absolute;
+	left: 30%;
+	right:30%;
+	top: 25%;
+	bottom:25%;
+	text-align: center;
+	}
 #umd_refresh_meta_button:before {
 	font-family: "dashicons";
 	content: "\f463";

@@ -75,7 +75,23 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 
 	});
 </script>
-
+<div class="umd-control-container">
+	<div class="umd-backdrop">
+		<div class="umd-modal">
+			<div class="umd-modal-title">
+				Default Title:
+			</div>
+			<div class="umd-modal-meta-key">default_meta_field</div>
+			<div class="umd-modal-meta-value-wrap">
+				<div class="umd-modal-meta-value">Default Meta Value</div>
+			</div>
+			<div class="umd-modal-buttons">
+				<a class="button button-primary button-hero umd-modal-button-yes" href="#">Default Yes Button</a>
+				<a class="button button-hero umd-modal-button-no" href="#">Default No Button</a>
+			</div>
+		</div>
+	</div>
+</div>
 <div id="umd_refresh_meta">
 	<a id="umd_refresh_meta_button" class="button" href="#">Refresh User Meta</a>
 </div>

@@ -30,13 +30,16 @@ function umd_return_raw_data(){
 			<script>
 				jQuery(function($){
 
-					function umdRemoveUserMeta($metakey, $metavalue, user_id){
+					function umdRemoveUserMeta(meta_key, meta_value, user_id){
+
 						jQuery.ajax(ajaxurl, {
 							type: 'POST',
 							dataType: 'html',
 							data: {
 								action: 'umd_remove_user_meta',
 								userid: user_id,
+								metakey: meta_key,
+								metavalue: meta_value,
 								security: '<?php echo $umd_remove_user_meta; ?>'
 							},
 							beforeSend: function () {
@@ -58,6 +61,22 @@ function umd_return_raw_data(){
 						});
 					}
 
+					function umdModalConfig(title, key, value, yes_button, yes_callback, no_button, no_callback){
+						$('.umd-modal-title').html(title);
+						$('.umd-modal-meta-key').html(key);
+						$('.umd-modal-meta-value').html(value);
+						$('.umd-modal-button-yes').html(yes_button).data('metakey', key).data('metavalue', value).click(yes_callback);
+						$('.umd-modal-button-no').html(no_button).click(no_callback);
+					}
+					function umdModalShow(){
+						$('.umd-control-container').css('display', 'block');
+					}
+					function umdModalHide(){
+						$('.umd-control-container').css('display', 'none');
+					}
+					function umdRemoveMetaConfirmed(key){
+
+					}
 					function umdHideManageButtons(metakey, hide){
 						var metakey_class = '.umd-metakey-' + metakey;
 						if(hide){
@@ -91,14 +110,11 @@ function umd_return_raw_data(){
 
 					$('.umd-remove-button').click(function(){
 						var metakey = $(this).data('metakey');
-//						var key_column = '.umd-metakey-' + metakey + ' .key-column';
-						var value_column = '.umd-metakey-' + metakey + ' .value-column';
-//						var kcdata = $(key_column).clone();
-						var vcdata = $(value_column).clone();
-
+						var metavalue = $('.umd-metakey-' + metakey + ' .value-column code').html();
 						umdHideRemoveButtons($(this).data('metakey'), false);
-						$(value_column).html('Are you sure you want to remove this meta key?');
-					})
+						umdModalConfig('Are you sure you want to remove the user meta below?', metakey, metavalue, 'Yes, remove!', umdRemoveMetaConfirmed, 'No, cancel', umdModalHide);
+						umdModalShow();
+					});
 
 					$('.umd-confirm-button').click(function(){
 
@@ -126,8 +142,6 @@ function umd_return_raw_data(){
 						$value = var_export( $value, true );
 				echo '<tr class="umd-meta-row umd-metakey-' . esc_html( $key ) . '" data-metakey="' . esc_html( $key ) . '">
 					<td class="key-column">
-					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-cancel-' . esc_html( $key ) . ' umd-cancel-button button hidden">Cancel</a>
-					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-confirm-' . esc_html( $key ) . ' umd-confirm-button button button-primary hidden">Yes, Remove!</a>
 					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-remove-' . esc_html( $key ) . ' umd-remove-button button button-primary hidden">Remove</a>
 					<a href="#" data-metakey="' . esc_html( $key ) . '" class="umd-edit-' . esc_html( $key ) . ' umd-edit-button button hidden">Edit</a>' . esc_html( $key ) . '</td>
 					<td class="value-column"><code>' . esc_html( $value ) . '</code></td>
