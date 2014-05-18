@@ -49,7 +49,6 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 	}
 
 	jQuery(document).ready(function($) {
-
 		$('.user-meta-display-field-row').on('click', '#user', function(){
 			var user_id = $(this).val();
 			if(user_id != -1){
@@ -81,20 +80,23 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 			<div class="umd-modal-title">
 				Default Title:
 			</div>
-			<div class="umd-modal-meta-key">default_meta_field</div>
-			<div class="umd-modal-meta-value-wrap">
-				<div class="umd-modal-meta-value">Default Meta Value</div>
-			</div>
-			<div class="umd-modal-buttons">
-				<a class="button button-primary button-hero umd-modal-button-yes" href="#">Default Yes Button</a>
-				<a class="button button-hero umd-modal-button-no" href="#">Default No Button</a>
+			<div class="umd-modal-body">
+				<div class="umd-modal-meta-key">default_meta_field</div>
+				<div class="umd-modal-meta-value-wrap">
+					<div class="umd-modal-meta-value">Default Meta Value</div>
+				</div>
+				<div class="umd-modal-buttons">
+					<a class="button button-primary button-hero umd-modal-button-yes" href="#">Default Yes Button</a>
+					<a class="button button-hero umd-modal-button-no" href="#">Default No Button</a>
+				</div>
 			</div>
 		</div>
-		<div class="umd-modal-close"><div class="dashicons dashicons-dismiss"></div></div>
+		<div class="umd-modal-close umd-modal-close-corner"><div class="dashicons dashicons-dismiss"></div></div>
 	</div>
 </div>
 <div id="umd_refresh_meta">
 	<a id="umd_refresh_meta_button" class="button" href="#">Refresh User Meta</a>
+	<a id="umd-add-user-meta" class="button" href="#">Add User Meta</a>
 </div>
 <div id="user-meta-output-box">
 	Please select a user from above.

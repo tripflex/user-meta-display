@@ -13,32 +13,77 @@ function umd_remove_user_meta(){
 	$results = delete_user_meta( $userid, $metakey, $metavalue );
 
 	if(!$results){
-
+		echo '0';
 	} else {
-
+		echo '1';
 	}
+	die;
 }
 
 function umd_return_raw_data(){
 	check_ajax_referer( 'umd_return_raw_data', 'security' );
 	$user_id = intval($_POST['userid']);
 	if ($user_id && $user_id != -1) {
-		$found_user_meta = get_user_meta($user_id);
+		$found_user_meta = array_map( function( $a ){ return $a[0]; }, get_user_meta( $user_id ) );
 		if($found_user_meta){
 			$umd_remove_user_meta = wp_create_nonce( 'umd_remove_user_meta' );
 			?>
 			<script>
 				jQuery(function($){
+					$('#umd-add-user-meta').css('display', 'inline-block');
 
 					function umdRemoveUserMeta(meta_key, meta_value, user_id){
-						umdShowModalLoader();
-						console.log('removed.');
 						console.log(meta_key);
 						console.log(meta_value);
 						console.log(user_id);
+						// Need to decode HTML code
+						var meta_value_unescaped = $('<div/>').html(meta_value).text();
+						jQuery.ajax(ajaxurl, {
+							type: 'POST',
+							dataType: 'html',
+							data: {
+								action: 'umd_remove_user_meta',
+								userid: user_id,
+								metakey: meta_key,
+								metavalue: meta_value_unescaped,
+								security: '<?php echo $umd_remove_user_meta; ?>'
+							},
+							beforeSend: function () {
+								umdShowModalLoader();
+							},
+							error: function(request, status, error) {
+								umdUpdateModal('<?php echo __("Ajax error Removing Meta!"); ?><br>' + error);
+							},
+							success: function(data) {
+								if(data == 1){
+									jQuery('.umd-metakey-' + meta_key).remove();
+									umdUpdateModalStatus('<?php echo __("Meta removed!"); ?>', false);
+								} else if(data == 0){
+									umdUpdateModalStatus('<?php echo __("Error removing meta!"); ?>', true);
+								} else {
+									umdUpdateModalStatus('<?php echo __("Unknown error removing!"); ?>', true);
+								}
+
+								umdModalFade(true);
+							}
+						});
+					}
+					function umdModalFade(out){
+						setTimeout(function(){
+							if(out) $('.umd-control-container').fadeOut("slow", "swing");
+							if(!out) $('.umd-control-container').fadeIn();
+						}, 3000);
+					}
+					function umdUpdateModalStatus(content, is_error){
+						var notice_class = 'umd-modal-notice-';
+						if(is_error) notice_class = notice_class + 'error';
+						if(!is_error) notice_class = notice_class + 'info';
+						$('.umd-modal-body').attr('display', 'none');
+						$('.umd-modal-title').html('<div class="' + notice_class + '">' + content + '</div>');
 					}
 
 					function umdModalConfig(title, key, value, userid, yes_button, yes_callback, no_button, no_callback){
+						$('.umd-modal-body').attr('display', 'block');
 						$('.umd-modal-title').html(title);
 						$('.umd-modal-meta-key').html(key);
 						$('.umd-modal-meta-value').html(value);
@@ -52,7 +97,7 @@ function umd_return_raw_data(){
 						$('.umd-control-container').css('display', 'none');
 					}
 					function umdShowModalLoader(){
-						$('.umd-modal').html('<img src="<?php echo plugins_url( '../assets/images/loader-inverted64.gif' , __FILE__ ); ?>">');
+						$('.umd-modal-title').html('<img src="<?php echo plugins_url( '../assets/images/loader-inverted64.gif' , __FILE__ ); ?>">');
 					}
 					function umdRemoveMetaConfirmed(){
 						var metakey = $(this).data('metakey');
@@ -117,18 +162,16 @@ function umd_return_raw_data(){
 					</tr>
 				</thead>
 				<tbody>';
-			foreach( $found_user_meta as $key => $values ) :
+			foreach( $found_user_meta as $key => $value ) :
 					if ( apply_filters( 'umd_ignore_user_meta_key', false, $key ) )
 						continue;
-				foreach( $values as $value ) :
-						$value = var_export( $value, true );
+//						$value = var_export( $value, true );
 				echo '<tr class="umd-meta-row umd-metakey-' . esc_html( $key ) . '" data-metakey="' . esc_html( $key ) . '" data-userid="' . intval( $user_id ) . '">
 					<td class="key-column">
 					<a href="#" data-userid="' . intval( $user_id ) . '" data-metakey="' . esc_html( $key ) . '" class="umd-remove-' . esc_html( $key ) . ' umd-remove-button button button-primary hidden">Remove</a>
 					<a href="#" data-userid="' . intval( $user_id ) . '" data-metakey="' . esc_html( $key ) . '" class="umd-edit-' . esc_html( $key ) . ' umd-edit-button button hidden">Edit</a>' . esc_html( $key ) . '</td>
 					<td class="value-column"><code>' . esc_html( $value ) . '</code></td>
 				</tr>';
-				endforeach;
 			endforeach;
 				echo '</tbody>
 			</table>';
