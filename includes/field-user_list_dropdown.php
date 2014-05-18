@@ -1,4 +1,4 @@
-<div id="umd_user_list_dropdown">
+<div id="umd-user-list-dropdown">
 <?php
 	add_action( 'admin_enqueue_scripts', 'umd_load_wp_dashicons' );
 	function umd_load_wp_dashicons() {
@@ -27,7 +27,7 @@
 	wp_dropdown_users($user_args);
 ?>
 </div>
-<div id="umd_refresh_dropdown">
-	<a id="umd_refresh_dropdown_button" class="button" href="#">Refresh</a>
+<div id="umd-refresh-dropdown">
+	<a id="umd-refresh-dropdown-button" class="button" href="#">Refresh</a>
 </div>
 <div style="clear: both;"></div>

@@ -19,23 +19,48 @@ function umd_remove_user_meta(){
 	}
 	die;
 }
+function umd_edit_user_meta(){
+	check_ajax_referer( 'umd_edit_user_meta', 'security' );
+	$userid = $_POST['userid'];
+	$metakey = $_POST['metakey'];
+	$metavalue = $_POST['metavalue'];
 
+	$results = update_user_meta( $userid, $metakey, $metavalue );
+
+	if(!$results){
+		echo '0';
+	} else {
+		echo '1';
+	}
+	die;
+}
 function umd_return_raw_data(){
 	check_ajax_referer( 'umd_return_raw_data', 'security' );
 	$user_id = intval($_POST['userid']);
 	if ($user_id && $user_id != -1) {
 		$found_user_meta = array_map( function( $a ){ return $a[0]; }, get_user_meta( $user_id ) );
 		if($found_user_meta){
-			$umd_remove_user_meta = wp_create_nonce( 'umd_remove_user_meta' );
+
 			?>
 			<script>
 				jQuery(function($){
-					$('#umd-add-user-meta').css('display', 'inline-block');
 
+					$('#umd-add-user-meta').css('display', 'inline-block').click(function(){
+						var modalTitle = '<?php echo __("Add new meta to user"); echo " " . $user_id . "?"; ?>';
+						var modalKey = 'Key: <input type="text" id="umd-edit-meta-key">';
+						var modalValue = '<div class="umd-edit-meta-value-title">Value:</div><textarea id="umd-edit-meta-value" cols="3"></textarea>';
+						umdModalConfig(modalTitle, modalKey, modalValue, '<?php echo $user_id; ?>', '<?php echo __("Add Meta"); ?>', umdAddNewUserMeta, '<?php echo __("Nope, go back."); ?>', umdModalHide);
+						umdModalFade(false);
+					});
+
+					function umdAddNewUserMeta(){
+						console.log('editdd');
+						var metakey = $('#umd-edit-meta-key').val();
+						var userid = $(this).data('userid');
+						var metavalue =$('#umd-edit-meta-value').val();
+						umdEditUserMeta(metakey, metavalue, userid);
+					}
 					function umdRemoveUserMeta(meta_key, meta_value, user_id){
-						console.log(meta_key);
-						console.log(meta_value);
-						console.log(user_id);
 						// Need to decode HTML code
 						var meta_value_unescaped = $('<div/>').html(meta_value).text();
 						jQuery.ajax(ajaxurl, {
@@ -69,10 +94,14 @@ function umd_return_raw_data(){
 						});
 					}
 					function umdModalFade(out){
-						setTimeout(function(){
-							if(out) $('.umd-control-container').fadeOut("slow", "swing");
-							if(!out) $('.umd-control-container').fadeIn();
-						}, 3000);
+						if(!out) {
+							$('.umd-control-container').fadeIn("slow", "swing");
+						} else {
+							setTimeout(function(){
+								$('.umd-control-container').fadeOut("slow", "swing");
+							}, 3000);
+						}
+
 					}
 					function umdUpdateModalStatus(content, is_error){
 						var notice_class = 'umd-modal-notice-';
