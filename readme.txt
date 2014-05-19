@@ -4,14 +4,18 @@ Donate link: https://www.gittip.com/tripflex
 Tags: user, meta, user meta, display, output, show, users, ajax, jquery, display name, id, user login
 Requires at least: 3.8
 Tested up to: 3.8
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv3
 
-Simple and clean plugin that will show user meta with ajax by selecting the user from a dropdown list. Ajax dropdown list by User Login, ID, or Display Name.
+Ajax powered admin page to show, edit, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
 
 == Description ==
 
-This is a simple and clean Wordpress plugin that will allow you to display all meta associated with a user by selecting from a dropdown list. You can select how the display list will show the users, by Display Name, User Login, or ID. Default is Display Name.
+Ajax powered admin page to show, edit, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
+
+You can select how the display list will show the users, by Display Name, User Login, or ID. Default is Display Name.
+
+Refresh the current users meta being shown, or dropdown list by clicking on Refresh button.
 
 This plugin will create a submenu "User Meta Display" item under the "Users" menu item in your wordpress installation.
 
@@ -19,7 +23,13 @@ User meta is generated via AJAX (doesn't require page reload) and is protected u
 
 = Features =
 
-* Display all user meta
+* Display all user meta via Ajax
+* Edit user meta via Ajax
+* Remove user meta via Ajax
+* Add new user meta via Ajax
+* Refresh user dropdown list via Ajax
+* Refresh displayed user meta via Ajax
+* Direct link from WP user list table to view user meta
 
 [Read more about User Meta Display](https://github.com/tripflex/user-meta-display).
 
@@ -57,11 +67,16 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Changelog ==
 
+= 1.2.0 =
+- May 11, 2014 -
+* Added refresh button for currently displayed user meta
+* Added refresh button for dropdown list of users
+
 = 1.1.1 =
 - March 25, 2014 -
 * fix missing css files
 
-= 1.1 = 
+= 1.1.0 = 
 - March 25, 2014 -
 * Add Ajax loading
 * Select user by ID, Display Name, or User Login

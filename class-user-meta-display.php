@@ -19,7 +19,7 @@ class User_Meta_Display {
 	/**
 	 * @var     string
 	 */
-	const VERSION = '1.1.1';
+	const VERSION = '1.2.0';
 	/**
 	 * @var      string
 	 */
@@ -250,7 +250,7 @@ class User_Meta_Display {
 								}
 							}else{
 								if( false !== strpos($script, '.')){
-									wp_enqueue_script( $this->plugin_slug . '-' . strtok($script, '.'), self::get_url( 'assets/js/'.$script , __FILE__ ) , array('jquery'), false, true );					
+									wp_enqueue_script( $this->plugin_slug . '-' . strtok($script, '.'), self::get_url( 'assets/js/'.$script , __FILE__ ) , array('jquery'), false, false );
 								}else{
 									wp_enqueue_script( $script );
 								}
