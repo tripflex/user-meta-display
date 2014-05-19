@@ -42,7 +42,7 @@ $group = array(
 	),
 	'scripts'	=> array(
 		'toggles.min.js',
-		'scripts-user_meta_output.js',
+		'scripts-user_meta_output.min.js',
 	),
 	'multiple'	=> false,
 );

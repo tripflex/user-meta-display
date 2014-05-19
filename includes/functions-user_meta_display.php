@@ -90,7 +90,8 @@ function umd_return_raw_data(){
 							} else {
 								umdUpdateModalStatus('<?php echo __("Unknown error ' + addOrEdit + 'ing!"); ?>', true);
 							}
-
+						},
+						complete: function(){
 							umdModalFade(true);
 						}
 					});
@@ -123,13 +124,14 @@ function umd_return_raw_data(){
 							} else {
 								umdUpdateModalStatus('<?php echo __("Unknown error removing!"); ?>', true);
 							}
-
+						},
+						complete: function(){
 							umdModalFade(true);
 						}
 					});
 				}
 			</script>
-			<script src="<?php echo plugins_url( '../assets/js/scripts-user_meta_display.js' , __FILE__ ); ?>"></script>
+			<script src="<?php echo plugins_url( '../assets/js/scripts-user_meta_display.min.js' , __FILE__ ); ?>"></script>
 			<?php
 			echo '<table class="form-table">
 				<thead>
