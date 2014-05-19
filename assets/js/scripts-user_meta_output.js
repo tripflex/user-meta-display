@@ -55,16 +55,3 @@ function umdHideManageButtons(metakey, hide){
 		$jq(metakey_class + ' .umd-edit-button').removeClass('hidden');
 	}
 }
-function umdHideRemoveButtons(metakey, hide){
-//	var confirm_class = '.umd-confirm-' + metakey;
-//	var cancel_class = '.umd-cancel-' + metakey;
-//	if(hide){
-//		umdHideManageButtons(metakey, false);
-//		$jq(confirm_class).addClass('hidden');
-//		$jq(cancel_class).addClass('hidden');
-//	} else {
-//		umdHideManageButtons(metakey, true);
-//		$jq(confirm_class).removeClass('hidden');
-//		$jq(cancel_class).removeClass('hidden');
-//	}
-}
