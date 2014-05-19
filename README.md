@@ -7,7 +7,7 @@
 + **Stable tag:** 1.2.0
 + **License:** GPLv3
 
-Ajax powered admin page to show, edit, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
+Ajax powered admin page to show, edit, add, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
 
 ## Description
 
@@ -64,11 +64,27 @@ The manual installation method involves downloading the plugin and uploading it 
 ## Screenshots
 
 ![](screenshot-1.gif)
-User Meta Display Output
+User List Dropdown Options
+
+![](screenshot-2.gif)
+Removing Meta
+
+![](screenshot-3.gif)
+Adding New Meta
+
+![](screenshot-4.gif)
+Editing Existing Meta
 
 ## Changelog
 
 ### 1.2.0
+- May 19, 2014 -
+* Added remove meta functionality
+* Added edit meta functionality
+* Added add new meta functionality
+* Few misc bug fixes
+
+### 1.2.0a
 - May 11, 2014 -
 * Added refresh button for currently displayed user meta
 * Added refresh button for dropdown list of users

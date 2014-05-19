@@ -1,17 +1,17 @@
 === User Meta Display ===
 Contributors: tripflex
 Donate link: https://www.gittip.com/tripflex
-Tags: user, meta, user meta, display, output, show, users, ajax, jquery, display name, id, user login
+Tags: user, meta, user meta, display, output, show, users, ajax, jquery, display name, id, user login, add, remove, edit, update, erase, delete
 Requires at least: 3.8
 Tested up to: 3.8
 Stable tag: 1.2.0
 License: GPLv3
 
-Ajax powered admin page to show, edit, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
+Ajax powered admin page to show, edit, add, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
 
 == Description ==
 
-Ajax powered admin page to show, edit, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
+Ajax powered admin page to show, edit, add, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
 
 You can select how the display list will show the users, by Display Name, User Login, or ID. Default is Display Name.
 
@@ -63,11 +63,21 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Screenshots ==
 
-1. User Meta Display Output
+1. User List Dropdown Options
+2. Removing Meta
+3. Adding New Meta
+4. Editing Existing Meta
 
 == Changelog ==
 
 = 1.2.0 =
+- May 19, 2014 -
+* Added remove meta functionality
+* Added edit meta functionality
+* Added add new meta functionality
+* Few misc bug fixes
+
+= 1.2.0a =
 - May 11, 2014 -
 * Added refresh button for currently displayed user meta
 * Added refresh button for dropdown list of users
