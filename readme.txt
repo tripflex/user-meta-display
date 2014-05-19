@@ -3,7 +3,7 @@ Contributors: tripflex
 Donate link: https://www.gittip.com/tripflex
 Tags: user, meta, user meta, display, output, show, users, ajax, jquery, display name, id, user login, add, remove, edit, update, erase, delete
 Requires at least: 3.8
-Tested up to: 3.8
+Tested up to: 3.9.1
 Stable tag: 1.2.0
 License: GPLv3
 
