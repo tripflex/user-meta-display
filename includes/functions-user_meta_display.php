@@ -26,6 +26,11 @@ function umd_edit_user_meta(){
 	$metavalue = $_POST['metavalue'];
 	$metaprevalue = $_POST['metaprevalue'];
 
+	if($metavalue === $metaprevalue){
+		echo '2';
+		die;
+	}
+
 	if($metaprevalue){
 		$results = update_user_meta( $userid, $metakey, $metavalue, $metaprevalue );
 	} else {
@@ -49,14 +54,13 @@ function umd_return_raw_data(){
 			$umd_edit_user_meta = wp_create_nonce( 'umd_edit_user_meta' );
 			?>
 			<script>
-				function umdEditUserMeta(meta_key, meta_value, user_id, meta_pre_value, isedit){
-					var addOrEdit;
+				function umdEditUserMeta(meta_key, meta_value, user_id, meta_pre_value){
 					// Need to decode HTML code
 					var meta_value_unescaped = jQuery('<div/>').html(meta_value).text();
-					if(isedit){
-						<?php $addOrEdit = __("edit"); ?>
+					if(meta_pre_value){
+						addOrEdit = '<?php echo __("edit"); ?>';
 					} else {
-						<?php $addOrEdit = __("add"); ?>
+						addOrEdit = '<?php echo __("add"); ?>';
 					}
 					jQuery.ajax(ajaxurl, {
 						type: 'POST',
@@ -73,16 +77,18 @@ function umd_return_raw_data(){
 							umdShowModalLoader();
 						},
 						error: function(request, status, error) {
-							umdUpdateModal('<?php echo __("Ajax error " . $addOrEdit . " ing Meta!"); ?><br>' + error);
+							umdUpdateModal('<?php echo __("Ajax error ' + addOrEdit + 'ing Meta!"); ?><br>' + error);
 						},
 						success: function(data) {
 							if(data == 1){
 								umdUpdateUserData(user_id);
-								umdUpdateModalStatus('<?php echo __("Meta " . $addOrEdit . "ed successfully!"); ?>', false);
+								umdUpdateModalStatus('<?php echo __("Meta ' + addOrEdit + 'ed successfully!"); ?>', false);
+							} else if(data == 2){
+								umdUpdateModalStatus('<?php echo __("Existing and new meta are the same."); ?>', false);
 							} else if(data == 0){
-								umdUpdateModalStatus('<?php echo __("Error " . $addOrEdit . "ing meta!"); ?>', true);
+								umdUpdateModalStatus('<?php echo __("Error ' + addOrEdit + 'ing meta!"); ?>', true);
 							} else {
-								umdUpdateModalStatus('<?php echo __("Unknown error " . $addOrEdit . "ing!"); ?>', true);
+								umdUpdateModalStatus('<?php echo __("Unknown error ' + addOrEdit + 'ing!"); ?>', true);
 							}
 
 							umdModalFade(true);

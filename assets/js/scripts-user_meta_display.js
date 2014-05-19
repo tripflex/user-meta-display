@@ -10,7 +10,7 @@ function umdUpdateUserMeta(){
 	var userid = $jq(this).data('userid');
 	var metavalue = $jq('#umd-edit-meta-value').val();
 	var metaprevalue = $jq(this).data('metavalue');
-	umdEditUserMeta(metakey, metavalue, userid, metaprevalue, true);
+	umdEditUserMeta(metakey, metavalue, userid, metaprevalue);
 }
 $jq('.umd-meta-row').mouseenter(function(){
 	umdHideManageButtons($jq(this).data('metakey'), false);
@@ -32,7 +32,6 @@ jQuery(function($jq){
 		var userid = $jq(this).data('userid');
 		var metavalue = $jq('.umd-metakey-' + metakey + ' .value-column code').html();
 
-		umdHideRemoveButtons($jq(this).data('metakey'), false);
 		umdModalConfig("Are you sure you want to remove the user meta below?", metakey, metavalue, userid, "Yes!", umdRemoveMetaConfirmed, "Nope, go back.", umdModalHide);
 		umdModalShow();
 	});
