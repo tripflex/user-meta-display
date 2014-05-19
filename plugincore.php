@@ -10,7 +10,7 @@
  * Plugin Name: User Meta Display
  * Plugin URI:  http://github.com/tripflex/user-meta-display
  * Description: Output/display user meta selected from a dropdown list of current users
- * Version:     1.1.1
+ * Version:     1.2.0
  * Author:      Myles McNamara
  * Author URI:  http://smyl.es
  * Text Domain: user-meta-display
