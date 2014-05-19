@@ -3,6 +3,8 @@ function umdAddNewUserMeta(){
 	var metakey = $jq('#umd-edit-meta-key').val();
 	var userid = $jq(this).data('userid');
 	var metavalue = $jq('#umd-edit-meta-value').val();
+	// Need to encode any HTML to prevent it from being stripped
+	metavalue = umdHTMLencode(metavalue);
 	umdEditUserMeta(metakey, metavalue, userid);
 }
 function umdUpdateUserMeta(){
@@ -10,6 +12,9 @@ function umdUpdateUserMeta(){
 	var userid = $jq(this).data('userid');
 	var metavalue = $jq('#umd-edit-meta-value').val();
 	var metaprevalue = $jq(this).data('metavalue');
+	// Need to encode any HTML to prevent it from being stripped
+	// Previous meta value is already encoded
+	metavalue = umdHTMLencode(metavalue);
 	umdEditUserMeta(metakey, metavalue, userid, metaprevalue);
 }
 $jq('.umd-meta-row').mouseenter(function(){

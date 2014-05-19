@@ -40,6 +40,7 @@ function umd_edit_user_meta(){
 	if($results){
 		echo '1';
 	} else {
+		echo $results;
 		echo '0';
 	}
 	die;
@@ -55,10 +56,12 @@ function umd_return_raw_data(){
 			?>
 			<script>
 				function umdEditUserMeta(meta_key, meta_value, user_id, meta_pre_value){
+					var meta_pre_value_unescaped;
 					// Need to decode HTML code
-					var meta_value_unescaped = jQuery('<div/>').html(meta_value).text();
+					var meta_value_unescaped = umdHTMLdecode(meta_value);
 					if(meta_pre_value){
 						addOrEdit = '<?php echo __("edit"); ?>';
+						meta_pre_value_unescaped = umdHTMLdecode(meta_pre_value);
 					} else {
 						addOrEdit = '<?php echo __("add"); ?>';
 					}
@@ -70,7 +73,7 @@ function umd_return_raw_data(){
 							userid: user_id,
 							metakey: meta_key,
 							metavalue: meta_value_unescaped,
-							metaprevalue: meta_pre_value,
+							metaprevalue: meta_pre_value_unescaped,
 							security: '<?php echo $umd_edit_user_meta; ?>'
 						},
 						beforeSend: function () {

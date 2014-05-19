@@ -1,4 +1,10 @@
 $jq = jQuery.noConflict();
+function umdHTMLencode(value){
+	return $jq('<div/>').text(value).html();
+}
+function umdHTMLdecode(value){
+	return $jq('<div/>').html(value).text();
+}
 function umdUnbindModalButtons(){
 	$jq('.umd-modal-button-yes').unbind();
 	$jq('.umd-modal-button-no').unbind();
