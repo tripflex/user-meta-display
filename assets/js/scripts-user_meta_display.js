@@ -1,10 +1,16 @@
 $jq = jQuery.noConflict();
 function umdAddNewUserMeta(){
-	console.log('editdd');
 	var metakey = $jq('#umd-edit-meta-key').val();
 	var userid = $jq(this).data('userid');
 	var metavalue = $jq('#umd-edit-meta-value').val();
 	umdEditUserMeta(metakey, metavalue, userid);
+}
+function umdUpdateUserMeta(){
+	var metakey = $jq('#umd-edit-meta-key').val();
+	var userid = $jq(this).data('userid');
+	var metavalue = $jq('#umd-edit-meta-value').val();
+	var metaprevalue = $jq(this).data('metavalue');
+	umdEditUserMeta(metakey, metavalue, userid, metaprevalue);
 }
 $jq('.umd-meta-row').mouseenter(function(){
 	umdHideManageButtons($jq(this).data('metakey'), false);
@@ -36,7 +42,7 @@ jQuery(function($jq){
 		var metavalue = $jq('.umd-metakey-' + metakey + ' .value-column code').html();
 		var modalKey = 'Key: <input type="text" id="umd-edit-meta-key" value="' + metakey + '" disabled>';
 		var modalValue = '<div class="umd-edit-meta-value-title">Value:</div><textarea id="umd-edit-meta-value" cols="3">' + metavalue + '</textarea>';
-		umdModalConfig('Edit meta below:', modalKey, modalValue, userid, 'Update Meta', umdAddNewUserMeta, 'Cancel', umdModalHide);
+		umdModalConfig('Edit meta below:', metakey, metavalue, userid, 'Update Meta', umdUpdateUserMeta, 'Cancel', umdModalHide, modalKey, modalValue);
 		umdModalFade(false);
 	});
 

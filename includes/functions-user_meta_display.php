@@ -24,8 +24,13 @@ function umd_edit_user_meta(){
 	$userid = $_POST['userid'];
 	$metakey = $_POST['metakey'];
 	$metavalue = $_POST['metavalue'];
+	$metaprevalue = $_POST['metaprevalue'];
 
-	$results = update_user_meta( $userid, $metakey, $metavalue );
+	if($metaprevalue){
+		$results = update_user_meta( $userid, $metakey, $metavalue, $metaprevalue );
+	} else {
+		$results = add_user_meta( $userid, $metakey, $metavalue );
+	}
 
 	if($results){
 		echo '1';
@@ -44,7 +49,7 @@ function umd_return_raw_data(){
 			$umd_edit_user_meta = wp_create_nonce( 'umd_edit_user_meta' );
 			?>
 			<script>
-				function umdEditUserMeta(meta_key, meta_value, user_id){
+				function umdEditUserMeta(meta_key, meta_value, user_id, meta_pre_value){
 					// Need to decode HTML code
 					var meta_value_unescaped = jQuery('<div/>').html(meta_value).text();
 					jQuery.ajax(ajaxurl, {
@@ -55,6 +60,7 @@ function umd_return_raw_data(){
 							userid: user_id,
 							metakey: meta_key,
 							metavalue: meta_value_unescaped,
+							metaprevalue: meta_pre_value,
 							security: '<?php echo $umd_edit_user_meta; ?>'
 						},
 						beforeSend: function () {
