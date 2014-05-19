@@ -49,9 +49,15 @@ function umd_return_raw_data(){
 			$umd_edit_user_meta = wp_create_nonce( 'umd_edit_user_meta' );
 			?>
 			<script>
-				function umdEditUserMeta(meta_key, meta_value, user_id, meta_pre_value){
+				function umdEditUserMeta(meta_key, meta_value, user_id, meta_pre_value, isedit){
+					var addOrEdit;
 					// Need to decode HTML code
 					var meta_value_unescaped = jQuery('<div/>').html(meta_value).text();
+					if(isedit){
+						<?php $addOrEdit = __("edit"); ?>
+					} else {
+						<?php $addOrEdit = __("add"); ?>
+					}
 					jQuery.ajax(ajaxurl, {
 						type: 'POST',
 						dataType: 'html',
@@ -67,16 +73,16 @@ function umd_return_raw_data(){
 							umdShowModalLoader();
 						},
 						error: function(request, status, error) {
-							umdUpdateModal('<?php echo __("Ajax error adding/editing Meta!"); ?><br>' + error);
+							umdUpdateModal('<?php echo __("Ajax error " . $addOrEdit . " ing Meta!"); ?><br>' + error);
 						},
 						success: function(data) {
 							if(data == 1){
 								umdUpdateUserData(user_id);
-								umdUpdateModalStatus('<?php echo __("Meta added/edited successfully!"); ?>', false);
+								umdUpdateModalStatus('<?php echo __("Meta " . $addOrEdit . "ed successfully!"); ?>', false);
 							} else if(data == 0){
-								umdUpdateModalStatus('<?php echo __("Error adding/editing meta!"); ?>', true);
+								umdUpdateModalStatus('<?php echo __("Error " . $addOrEdit . "ing meta!"); ?>', true);
 							} else {
-								umdUpdateModalStatus('<?php echo __("Unknown error adding/editing!"); ?>', true);
+								umdUpdateModalStatus('<?php echo __("Unknown error " . $addOrEdit . "ing!"); ?>', true);
 							}
 
 							umdModalFade(true);
@@ -105,7 +111,7 @@ function umd_return_raw_data(){
 						success: function(data) {
 							if(data == 1){
 								jQuery('.umd-metakey-' + meta_key).remove();
-								umdUpdateModalStatus('<?php echo __("Meta removed!"); ?>', false);
+								umdUpdateModalStatus('<?php echo __("Meta successfully removed!"); ?>', false);
 							} else if(data == 0){
 								umdUpdateModalStatus('<?php echo __("Error removing meta!"); ?>', true);
 							} else {

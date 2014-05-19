@@ -10,7 +10,7 @@ function umdUpdateUserMeta(){
 	var userid = $jq(this).data('userid');
 	var metavalue = $jq('#umd-edit-meta-value').val();
 	var metaprevalue = $jq(this).data('metavalue');
-	umdEditUserMeta(metakey, metavalue, userid, metaprevalue);
+	umdEditUserMeta(metakey, metavalue, userid, metaprevalue, true);
 }
 $jq('.umd-meta-row').mouseenter(function(){
 	umdHideManageButtons($jq(this).data('metakey'), false);
