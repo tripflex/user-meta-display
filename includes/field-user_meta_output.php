@@ -3,42 +3,13 @@
 <?php
 $umd_return_raw_data = wp_create_nonce( 'umd_return_raw_data' );
 $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown' );
-$umd_remove_user_meta = wp_create_nonce( 'umd_remove_user_meta' );
-$umd_edit_user_meta = wp_create_nonce( 'umd_edit_user_meta' );
 ?>
 <script>
-	function umdEditUserMeta(meta_key, meta_value, user_id){
-		// Need to decode HTML code
-		var meta_value_unescaped = $('<div/>').html(meta_value).text();
-		jQuery.ajax(ajaxurl, {
-			type: 'POST',
-			dataType: 'html',
-			data: {
-				action: 'umd_edit_user_meta',
-				userid: user_id,
-				metakey: meta_key,
-				metavalue: meta_value_unescaped,
-				security: '<?php echo $umd_edit_user_meta; ?>'
-			},
-			beforeSend: function () {
-				umdShowModalLoader();
-			},
-			error: function(request, status, error) {
-				umdUpdateModal('<?php echo __("Ajax error adding/editing Meta!"); ?><br>' + error);
-			},
-			success: function(data) {
-				if(data == 1){
-					umdUpdateModalStatus('<?php echo __("Meta added/edited successfully!"); ?>', false);
-				} else if(data == 0){
-					umdUpdateModalStatus('<?php echo __("Error adding/editing meta!"); ?>', true);
-				} else {
-					umdUpdateModalStatus('<?php echo __("Unknown error adding/editing!"); ?>', true);
-				}
-
-				umdModalFade(true);
-			}
-		});
+	function umdShowModalLoader(){
+		$jq('.umd-modal-title').html('<img src="<?php echo plugins_url( '../assets/images/loader-inverted64.gif' , __FILE__ ); ?>">');
+		$jq('.umd-modal-body').css('display', 'none');
 	}
+
 	function umdUpdateUserData(user_id){
 		jQuery.ajax(ajaxurl, {
 			type: 'POST',
@@ -82,8 +53,22 @@ $umd_edit_user_meta = wp_create_nonce( 'umd_edit_user_meta' );
 		});
 	}
 
+
 	jQuery(document).ready(function($) {
-		$('.user-meta-display-field-row').on('click', '#user', function(){
+
+		$('#umd-add-user-meta').click(function(){
+			var userid = $('#user').val();
+			var modalTitle = 'Add new meta to user ' + userid;
+			var modalKey = 'Key: <input type="text" id="umd-edit-meta-key">';
+			var modalValue = '<div class="umd-edit-meta-value-title">Value:</div><textarea id="umd-edit-meta-value" cols="3"></textarea>';
+			umdModalConfig(modalTitle, modalKey, modalValue, userid, 'Add Meta', umdAddNewUserMeta, 'Nope, go back', umdModalHide);
+			umdModalFade(false);
+		});
+
+		$('.umd-modal-close').click(function(){
+			umdModalHide();
+		});
+		$('.user-meta-display-field-row').on('change', '#user', function(){
 			var user_id = $(this).val();
 			if(user_id != -1){
 				umdUpdateUserData(user_id);

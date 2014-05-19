@@ -12,10 +12,10 @@ function umd_remove_user_meta(){
 
 	$results = delete_user_meta( $userid, $metakey, $metavalue );
 
-	if(!$results){
-		echo '0';
-	} else {
+	if($results){
 		echo '1';
+	} else {
+		echo '0';
 	}
 	die;
 }
@@ -27,10 +27,10 @@ function umd_edit_user_meta(){
 
 	$results = update_user_meta( $userid, $metakey, $metavalue );
 
-	if(!$results){
-		echo '0';
-	} else {
+	if($results){
 		echo '1';
+	} else {
+		echo '0';
 	}
 	die;
 }
@@ -40,148 +40,78 @@ function umd_return_raw_data(){
 	if ($user_id && $user_id != -1) {
 		$found_user_meta = array_map( function( $a ){ return $a[0]; }, get_user_meta( $user_id ) );
 		if($found_user_meta){
-
+			$umd_remove_user_meta = wp_create_nonce( 'umd_remove_user_meta' );
+			$umd_edit_user_meta = wp_create_nonce( 'umd_edit_user_meta' );
 			?>
 			<script>
-				jQuery(function($){
-
-					$('#umd-add-user-meta').css('display', 'inline-block').click(function(){
-						var modalTitle = '<?php echo __("Add new meta to user"); echo " " . $user_id . "?"; ?>';
-						var modalKey = 'Key: <input type="text" id="umd-edit-meta-key">';
-						var modalValue = '<div class="umd-edit-meta-value-title">Value:</div><textarea id="umd-edit-meta-value" cols="3"></textarea>';
-						umdModalConfig(modalTitle, modalKey, modalValue, '<?php echo $user_id; ?>', '<?php echo __("Add Meta"); ?>', umdAddNewUserMeta, '<?php echo __("Nope, go back."); ?>', umdModalHide);
-						umdModalFade(false);
-					});
-
-					function umdAddNewUserMeta(){
-						console.log('editdd');
-						var metakey = $('#umd-edit-meta-key').val();
-						var userid = $(this).data('userid');
-						var metavalue =$('#umd-edit-meta-value').val();
-						umdEditUserMeta(metakey, metavalue, userid);
-					}
-					function umdRemoveUserMeta(meta_key, meta_value, user_id){
-						// Need to decode HTML code
-						var meta_value_unescaped = $('<div/>').html(meta_value).text();
-						jQuery.ajax(ajaxurl, {
-							type: 'POST',
-							dataType: 'html',
-							data: {
-								action: 'umd_remove_user_meta',
-								userid: user_id,
-								metakey: meta_key,
-								metavalue: meta_value_unescaped,
-								security: '<?php echo $umd_remove_user_meta; ?>'
-							},
-							beforeSend: function () {
-								umdShowModalLoader();
-							},
-							error: function(request, status, error) {
-								umdUpdateModal('<?php echo __("Ajax error Removing Meta!"); ?><br>' + error);
-							},
-							success: function(data) {
-								if(data == 1){
-									jQuery('.umd-metakey-' + meta_key).remove();
-									umdUpdateModalStatus('<?php echo __("Meta removed!"); ?>', false);
-								} else if(data == 0){
-									umdUpdateModalStatus('<?php echo __("Error removing meta!"); ?>', true);
-								} else {
-									umdUpdateModalStatus('<?php echo __("Unknown error removing!"); ?>', true);
-								}
-
-								umdModalFade(true);
+				function umdEditUserMeta(meta_key, meta_value, user_id){
+					// Need to decode HTML code
+					var meta_value_unescaped = jQuery('<div/>').html(meta_value).text();
+					jQuery.ajax(ajaxurl, {
+						type: 'POST',
+						dataType: 'html',
+						data: {
+							action: 'umd_edit_user_meta',
+							userid: user_id,
+							metakey: meta_key,
+							metavalue: meta_value_unescaped,
+							security: '<?php echo $umd_edit_user_meta; ?>'
+						},
+						beforeSend: function () {
+							umdShowModalLoader();
+						},
+						error: function(request, status, error) {
+							umdUpdateModal('<?php echo __("Ajax error adding/editing Meta!"); ?><br>' + error);
+						},
+						success: function(data) {
+							if(data == 1){
+								umdUpdateUserData(user_id);
+								umdUpdateModalStatus('<?php echo __("Meta added/edited successfully!"); ?>', false);
+							} else if(data == 0){
+								umdUpdateModalStatus('<?php echo __("Error adding/editing meta!"); ?>', true);
+							} else {
+								umdUpdateModalStatus('<?php echo __("Unknown error adding/editing!"); ?>', true);
 							}
-						});
-					}
-					function umdModalFade(out){
-						if(!out) {
-							$('.umd-control-container').fadeIn("slow", "swing");
-						} else {
-							setTimeout(function(){
-								$('.umd-control-container').fadeOut("slow", "swing");
-							}, 3000);
+
+							umdModalFade(true);
 						}
+					});
+				}
+				function umdRemoveUserMeta(meta_key, meta_value, user_id){
+					// Need to decode HTML code
+					var meta_value_unescaped = jQuery('<div/>').html(meta_value).text();
+					jQuery.ajax(ajaxurl, {
+						type: 'POST',
+						dataType: 'html',
+						data: {
+							action: 'umd_remove_user_meta',
+							userid: user_id,
+							metakey: meta_key,
+							metavalue: meta_value_unescaped,
+							security: '<?php echo $umd_remove_user_meta; ?>'
+						},
+						beforeSend: function () {
+							umdShowModalLoader();
+						},
+						error: function(request, status, error) {
+							umdUpdateModal('<?php echo __("Ajax error Removing Meta!"); ?><br>' + error);
+						},
+						success: function(data) {
+							if(data == 1){
+								jQuery('.umd-metakey-' + meta_key).remove();
+								umdUpdateModalStatus('<?php echo __("Meta removed!"); ?>', false);
+							} else if(data == 0){
+								umdUpdateModalStatus('<?php echo __("Error removing meta!"); ?>', true);
+							} else {
+								umdUpdateModalStatus('<?php echo __("Unknown error removing!"); ?>', true);
+							}
 
-					}
-					function umdUpdateModalStatus(content, is_error){
-						var notice_class = 'umd-modal-notice-';
-						if(is_error) notice_class = notice_class + 'error';
-						if(!is_error) notice_class = notice_class + 'info';
-						$('.umd-modal-body').attr('display', 'none');
-						$('.umd-modal-title').html('<div class="' + notice_class + '">' + content + '</div>');
-					}
-
-					function umdModalConfig(title, key, value, userid, yes_button, yes_callback, no_button, no_callback){
-						$('.umd-modal-body').attr('display', 'block');
-						$('.umd-modal-title').html(title);
-						$('.umd-modal-meta-key').html(key);
-						$('.umd-modal-meta-value').html(value);
-						$('.umd-modal-button-yes').html(yes_button).data('metakey', key).data('metavalue', value).data('userid', userid).click(yes_callback);
-						$('.umd-modal-button-no').html(no_button).click(no_callback);
-					}
-					function umdModalShow(){
-						$('.umd-control-container').css('display', 'block');
-					}
-					function umdModalHide(){
-						$('.umd-control-container').css('display', 'none');
-					}
-					function umdShowModalLoader(){
-						$('.umd-modal-title').html('<img src="<?php echo plugins_url( '../assets/images/loader-inverted64.gif' , __FILE__ ); ?>">');
-					}
-					function umdRemoveMetaConfirmed(){
-						var metakey = $(this).data('metakey');
-						var metavalue = $(this).data('metavalue');
-						var userid = $(this).data('userid');
-
-						umdRemoveUserMeta(metakey, metavalue, userid);
-					}
-					function umdHideManageButtons(metakey, hide){
-						var metakey_class = '.umd-metakey-' + metakey;
-						if(hide){
-							$(metakey_class + ' .umd-remove-button').addClass('hidden');
-							$(metakey_class + ' .umd-edit-button').addClass('hidden');
-						} else {
-							$(metakey_class + ' .umd-remove-button').removeClass('hidden');
-							$(metakey_class + ' .umd-edit-button').removeClass('hidden');
+							umdModalFade(true);
 						}
-					}
-
-					function umdHideRemoveButtons(metakey, hide){
-						var confirm_class = '.umd-confirm-' + metakey;
-						var cancel_class = '.umd-cancel-' + metakey;
-						if(hide){
-							umdHideManageButtons(metakey, false);
-							$(confirm_class).addClass('hidden');
-							$(cancel_class).addClass('hidden');
-						} else {
-							umdHideManageButtons(metakey, true);
-							$(confirm_class).removeClass('hidden');
-							$(cancel_class).removeClass('hidden');
-						}
-					}
-
-					$('.umd-meta-row').mouseenter(function(){
-						umdHideManageButtons($(this).data('metakey'), false);
-					}).mouseleave(function(){
-						umdHideManageButtons($(this).data('metakey'), true);
 					});
-
-					$('.umd-remove-button').click(function(){
-						var metakey = $(this).data('metakey');
-						var userid = $(this).data('userid');
-						var metavalue = $('.umd-metakey-' + metakey + ' .value-column code').html();
-
-						umdHideRemoveButtons($(this).data('metakey'), false);
-						umdModalConfig("<?php echo __('Are you sure you want to remove the user meta below?'); ?>", metakey, metavalue, userid, "<?php echo __('Yes!'); ?>", umdRemoveMetaConfirmed, "<?php echo __('Nope, go back.'); ?>", umdModalHide);
-						umdModalShow();
-					});
-
-					$('.umd-modal-close').click(function(){
-						umdModalHide();
-					});
-
-				});
+				}
 			</script>
+			<script src="<?php echo plugins_url( '../assets/js/scripts-user_meta_display.js' , __FILE__ ); ?>"></script>
 			<?php
 			echo '<table class="form-table">
 				<thead>

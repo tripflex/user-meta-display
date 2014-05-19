@@ -250,7 +250,7 @@ class User_Meta_Display {
 								}
 							}else{
 								if( false !== strpos($script, '.')){
-									wp_enqueue_script( $this->plugin_slug . '-' . strtok($script, '.'), self::get_url( 'assets/js/'.$script , __FILE__ ) , array('jquery'), false, true );					
+									wp_enqueue_script( $this->plugin_slug . '-' . strtok($script, '.'), self::get_url( 'assets/js/'.$script , __FILE__ ) , array('jquery'), false, false );
 								}else{
 									wp_enqueue_script( $script );
 								}
