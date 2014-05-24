@@ -27,7 +27,7 @@ function umd_edit_user_meta(){
 	$metaprevalue = $_POST['metaprevalue'];
 
 	if($metavalue === $metaprevalue){
-		echo '2';
+		echo '<div id="umd-return-status">2</div>';
 		die;
 	}
 

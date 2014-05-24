@@ -76,7 +76,7 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 		});
 		$('#umd-refresh-meta-button').click(function(){
 			var user_id = $('#user').val();
-			if(user_id != -1){
+			if(user_id && user_id != -1){
 				umdUpdateUserData(user_id);
 			}
 		});
