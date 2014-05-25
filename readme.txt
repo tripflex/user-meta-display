@@ -4,7 +4,7 @@ Donate link: https://www.gittip.com/tripflex
 Tags: user, meta, user meta, display, output, show, users, ajax, jquery, display name, id, user login, add, remove, edit, update, erase, delete
 Requires at least: 3.8
 Tested up to: 3.9.1
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv3
 
 Ajax powered admin page to show, edit, add, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
@@ -70,28 +70,34 @@ The manual installation method involves downloading the plugin and uploading it 
 
 == Changelog ==
 
+= 1.2.1 =
+( May 24, 2014 )
+* Fixed php warning when user_id is null
+* Updated method of success or error for incorrect notification when debug is enabled
+* Moved external JS inside php file and removed script reference
+
 = 1.2.0 =
-- May 19, 2014 -
+( May 19, 2014 )
 * Added remove meta functionality
 * Added edit meta functionality
 * Added add new meta functionality
 * Few misc bug fixes
 
 = 1.2.0a =
-- May 11, 2014 -
+( May 11, 2014 )
 * Added refresh button for currently displayed user meta
 * Added refresh button for dropdown list of users
 
 = 1.1.1 =
-- March 25, 2014 -
+( March 25, 2014 )
 * fix missing css files
 
 = 1.1.0 = 
-- March 25, 2014 -
+( March 25, 2014 )
 * Add Ajax loading
 * Select user by ID, Display Name, or User Login
 * Removed old non-used code
 
 = 1.0.0 = 
-- March 17, 2014 -
+( March 17, 2014 )
 * Initial Creation

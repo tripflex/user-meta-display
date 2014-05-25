@@ -4,7 +4,7 @@
 + **Tags:** user, meta, user meta, display, output, show, users, ajax, jquery, display name, id, user login
 + **Requires at least:** 3.8
 + **Tested up to:** 3.8
-+ **Stable tag:** 1.2.0
++ **Stable tag:** 1.2.1
 + **License:** GPLv3
 
 Ajax powered admin page to show, edit, add, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
@@ -76,6 +76,13 @@ Adding New Meta
 Editing Existing Meta
 
 ## Changelog
+
+### 1.2.1
+( May 24, 2014 )
+* Added encode/decode to enable using html in meta value
+* Fixed php warning when user_id is null
+* Updated method of success or error for incorrect notification when debug is enabled
+* Moved external JS inside php file and removed script reference
 
 ### 1.2.0
 - May 19, 2014 -
