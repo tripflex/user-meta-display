@@ -13,9 +13,9 @@ function umd_remove_user_meta(){
 	$results = delete_user_meta( $userid, $metakey, $metavalue );
 
 	if($results){
-		echo '1';
+		echo '<div id="umd-return-status" data-status="success">' . __( "Meta successfully removed!" ) . '</div>';
 	} else {
-		echo '0';
+		echo '<div id="umd-return-status" data-status="error">' . __( "Error removing meta!" ) . '</div>';
 	}
 	die;
 }
@@ -27,21 +27,20 @@ function umd_edit_user_meta(){
 	$metaprevalue = $_POST['metaprevalue'];
 
 	if($metavalue === $metaprevalue){
-		echo '<div id="umd-return-status">2</div>';
+		echo '<div id="umd-return-status" data-status="error">' . __( "Existing and new meta are the same." ) .'</div>';
 		die;
 	}
 
-	if($metaprevalue){
-		$results = update_user_meta( $userid, $metakey, $metavalue, $metaprevalue );
-	} else {
-		$results = add_user_meta( $userid, $metakey, $metavalue );
-	}
+	$addOrEdit = 'add';
+
+	if($metaprevalue) $addOrEdit = 'edit';
+
+	$results = update_user_meta( $userid, $metakey, $metavalue, $metaprevalue );
 
 	if($results){
-		echo '1';
+		echo '<div id="umd-return-status" data-status="success">' . sprintf(__( 'Meta %1$sed successfully!' ), $addOrEdit) . '</div>';
 	} else {
-		echo $results;
-		echo '0';
+		echo '<div id="umd-return-status" data-status="error">' . sprintf( __( 'Error %1$sed meta!' ), $addOrEdit ) . '</div>';
 	}
 	die;
 }
@@ -55,17 +54,13 @@ function umd_return_raw_data(){
 			$umd_edit_user_meta = wp_create_nonce( 'umd_edit_user_meta' );
 			?>
 			<script>
-				function umdEditUserMeta(meta_key, meta_value, user_id, meta_pre_value){
+				$jq = jQuery.noConflict();
+				function umdEditUserMeta(meta_key, meta_value, user_id, meta_pre_value) {
 					var meta_pre_value_unescaped;
 					// Need to decode HTML code
 					var meta_value_unescaped = umdHTMLdecode(meta_value);
-					if(meta_pre_value){
-						addOrEdit = '<?php echo __("edit"); ?>';
-						meta_pre_value_unescaped = umdHTMLdecode(meta_pre_value);
-					} else {
-						addOrEdit = '<?php echo __("add"); ?>';
-					}
-					jQuery.ajax(ajaxurl, {
+					if (meta_pre_value) meta_pre_value_unescaped = umdHTMLdecode(meta_pre_value);
+					$jq.ajax(ajaxurl, {
 						type: 'POST',
 						dataType: 'html',
 						data: {
@@ -79,30 +74,32 @@ function umd_return_raw_data(){
 						beforeSend: function () {
 							umdShowModalLoader();
 						},
-						error: function(request, status, error) {
-							umdUpdateModal('<?php echo __("Ajax error ' + addOrEdit + 'ing Meta!"); ?><br>' + error);
+						error: function (request, status, error) {
+							umdUpdateModal('<?php echo __("Ajax error!"); ?><br>' + error);
 						},
-						success: function(data) {
-							if(data == 1){
+						success: function (data) {
+
+							results = $jq(data).filter('#umd-return-status');
+							var status_result = $jq(results).data('status');
+							var status_description = $jq(results).text();
+
+							if (status_result == 'success') {
 								umdUpdateUserData(user_id);
-								umdUpdateModalStatus('<?php echo __("Meta ' + addOrEdit + 'ed successfully!"); ?>', false);
-							} else if(data == 2){
-								umdUpdateModalStatus('<?php echo __("Existing and new meta are the same."); ?>', false);
-							} else if(data == 0){
-								umdUpdateModalStatus('<?php echo __("Error ' + addOrEdit + 'ing meta!"); ?>', true);
+								umdUpdateModalStatus(status_description, false);
 							} else {
-								umdUpdateModalStatus('<?php echo __("Unknown error ' + addOrEdit + 'ing!"); ?>', true);
+								umdUpdateModalStatus(status_description, true);
 							}
 						},
-						complete: function(){
+						complete: function () {
 							umdModalFade(true);
 						}
 					});
 				}
-				function umdRemoveUserMeta(meta_key, meta_value, user_id){
+
+				function umdRemoveUserMeta(meta_key, meta_value, user_id) {
 					// Need to decode HTML code
-					var meta_value_unescaped = jQuery('<div/>').html(meta_value).text();
-					jQuery.ajax(ajaxurl, {
+					var meta_value_unescaped = $jq('<div/>').html(meta_value).text();
+					$jq.ajax(ajaxurl, {
 						type: 'POST',
 						dataType: 'html',
 						data: {
@@ -115,26 +112,80 @@ function umd_return_raw_data(){
 						beforeSend: function () {
 							umdShowModalLoader();
 						},
-						error: function(request, status, error) {
+						error: function (request, status, error) {
 							umdUpdateModal('<?php echo __("Ajax error Removing Meta!"); ?><br>' + error);
 						},
-						success: function(data) {
-							if(data == 1){
-								jQuery('.umd-metakey-' + meta_key).remove();
-								umdUpdateModalStatus('<?php echo __("Meta successfully removed!"); ?>', false);
-							} else if(data == 0){
-								umdUpdateModalStatus('<?php echo __("Error removing meta!"); ?>', true);
+						success: function (data) {
+
+							results = $jq(data).filter('#umd-return-status');
+							var status_result = $jq(results).data('status');
+							var status_description = $jq(results).text();
+
+							if (status_result == 'success') {
+								$jq('.umd-metakey-' + meta_key).remove();
+								umdUpdateModalStatus(status_description, false);
 							} else {
-								umdUpdateModalStatus('<?php echo __("Unknown error removing!"); ?>', true);
+								umdUpdateModalStatus(status_description, true);
 							}
 						},
-						complete: function(){
+						complete: function () {
 							umdModalFade(true);
 						}
 					});
 				}
+				function umdAddNewUserMeta() {
+					var metakey = $jq('#umd-edit-meta-key').val();
+					var userid = $jq(this).data('userid');
+					var metavalue = $jq('#umd-edit-meta-value').val();
+					// Need to encode any HTML to prevent it from being stripped
+					metavalue = umdHTMLencode(metavalue);
+					umdEditUserMeta(metakey, metavalue, userid);
+				}
+				function umdUpdateUserMeta() {
+					var metakey = $jq('#umd-edit-meta-key').val();
+					var userid = $jq(this).data('userid');
+					var metavalue = $jq('#umd-edit-meta-value').val();
+					var metaprevalue = $jq(this).data('metavalue');
+					// Need to encode any HTML to prevent it from being stripped
+					// Previous meta value is already encoded
+					metavalue = umdHTMLencode(metavalue);
+					umdEditUserMeta(metakey, metavalue, userid, metaprevalue);
+				}
+				$jq('.umd-meta-row').mouseenter(function () {
+					umdHideManageButtons($jq(this).data('metakey'), false);
+				}).mouseleave(function () {
+					umdHideManageButtons($jq(this).data('metakey'), true);
+				});
+				function umdRemoveMetaConfirmed() {
+					var metakey = $jq(this).data('metakey');
+					var metavalue = $jq(this).data('metavalue');
+					var userid = $jq(this).data('userid');
+
+					umdRemoveUserMeta(metakey, metavalue, userid);
+				}
+				jQuery(function ($jq) {
+					// Display add user meta button as this JS is only loaded when a users meta is being shown
+					$jq('#umd-add-user-meta').css('display', 'inline-block');
+					$jq('.umd-remove-button').click(function () {
+						var metakey = $jq(this).data('metakey');
+						var userid = $jq(this).data('userid');
+						var metavalue = $jq('.umd-metakey-' + metakey + ' .value-column code').html();
+
+						umdModalConfig("Are you sure you want to remove the user meta below?", metakey, metavalue, userid, "Yes!", umdRemoveMetaConfirmed, "Nope, go back.", umdModalHide);
+						umdModalShow();
+					});
+					$jq('.umd-edit-button').click(function () {
+						var metakey = $jq(this).data('metakey');
+						var userid = $jq(this).data('userid');
+						var metavalue = $jq('.umd-metakey-' + metakey + ' .value-column code').html();
+						var modalKey = 'Key: <input type="text" id="umd-edit-meta-key" value="' + metakey + '" disabled>';
+						var modalValue = '<div class="umd-edit-meta-value-title">Value:</div><textarea id="umd-edit-meta-value" cols="3">' + metavalue + '</textarea>';
+						umdModalConfig('Edit meta below:', metakey, metavalue, userid, 'Update Meta', umdUpdateUserMeta, 'Cancel', umdModalHide, modalKey, modalValue);
+						umdModalFade(false);
+					});
+
+				});
 			</script>
-			<script src="<?php echo plugins_url( '../assets/js/scripts-user_meta_display.min.js' , __FILE__ ); ?>"></script>
 			<?php
 			echo '<table class="form-table">
 				<thead>
