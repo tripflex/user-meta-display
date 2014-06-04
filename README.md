@@ -4,7 +4,7 @@
 + **Tags:** user, meta, user meta, display, output, show, users, ajax, jquery, display name, id, user login
 + **Requires at least:** 3.8
 + **Tested up to:** 3.8
-+ **Stable tag:** 1.2.1
++ **Stable tag:** 1.2.2
 + **License:** GPLv3
 
 Ajax powered admin page to show, edit, add, and remove user meta. Choose dropdown list by User Login, ID, or Display Name.
@@ -26,6 +26,7 @@ User meta is generated via AJAX (doesn't require page reload) and is protected u
 * Display all user meta via Ajax
 * Edit user meta via Ajax
 * Remove user meta via Ajax
+* Supports Adding/Updating meta with HTML
 * Add new user meta via Ajax
 * Refresh user dropdown list via Ajax
 * Refresh displayed user meta via Ajax
@@ -76,6 +77,13 @@ Adding New Meta
 Editing Existing Meta
 
 ## Changelog
+
+### 1.2.2
+* June 4, 2014
+* Fixed problem with updating meta with HTML
+* Moved Add/Remove buttons to side of list table
+* Fixed adding new meta with HTML
+* Added alternating row colors
 
 ### 1.2.1
 ( May 24, 2014 )

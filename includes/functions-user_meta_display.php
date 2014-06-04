@@ -23,8 +23,8 @@ function umd_edit_user_meta(){
 	check_ajax_referer( 'umd_edit_user_meta', 'security' );
 	$userid = $_POST['userid'];
 	$metakey = $_POST['metakey'];
-	$metavalue = $_POST['metavalue'];
-	$metaprevalue = $_POST['metaprevalue'];
+	$metavalue = stripslashes($_POST['metavalue']);
+	$metaprevalue = stripslashes($_POST['metaprevalue']);
 
 	if($metavalue === $metaprevalue){
 		echo '<div id="umd-return-status" data-status="error">' . __( "Existing and new meta are the same." ) .'</div>';
@@ -84,7 +84,7 @@ function umd_return_raw_data(){
 							var status_description = $jq(results).text();
 
 							if (status_result == 'success') {
-								umdUpdateUserData(user_id);
+								umdUpdateUserData(user_id, meta_key);
 								umdUpdateModalStatus(status_description, false);
 							} else {
 								umdUpdateModalStatus(status_description, true);
@@ -151,11 +151,6 @@ function umd_return_raw_data(){
 					metavalue = umdHTMLencode(metavalue);
 					umdEditUserMeta(metakey, metavalue, userid, metaprevalue);
 				}
-				$jq('.umd-meta-row').mouseenter(function () {
-					umdHideManageButtons($jq(this).data('metakey'), false);
-				}).mouseleave(function () {
-					umdHideManageButtons($jq(this).data('metakey'), true);
-				});
 				function umdRemoveMetaConfirmed() {
 					var metakey = $jq(this).data('metakey');
 					var metavalue = $jq(this).data('metavalue');
@@ -164,6 +159,41 @@ function umd_return_raw_data(){
 					umdRemoveUserMeta(metakey, metavalue, userid);
 				}
 				jQuery(function ($jq) {
+//					$jq('.umd-meta-row, .umd-metakey-buttons').mouseenter(function () {
+////					umdHideManageButtons(null, true);
+//						umdHideManageButtons($jq(this).data('metakey'), false);
+//					}).mouseleave(function () {
+//						umdHideManageButtons($jq(this).data('metakey'), true);
+//					});
+
+					// Set row colors as normal CSS nth-child not supported in IE''
+					$jq(".umd-meta-table-body > tr:odd").css("background-color", "#F7F7F7").hover(
+						function(){
+							$jq(this).css('background-color', '#CCCCCC');
+						},
+						function(){
+							$jq(this).css('background-color', '#F7F7F7');
+						}
+					);
+
+					$jq('.umd-meta-row').hover(
+						function () {
+							$jq('.umd-metakey-buttons', $jq(this)).fadeTo("fast", 1);
+						},
+						function () {
+							$jq('.umd-metakey-buttons', $jq(this)).fadeTo("fast", 0);
+						}
+					);
+
+					$jq('.umd-metakey-buttons').hover(
+						function () {
+							$jq(this).stop(true).fadeTo("fast", 1);
+						},
+						function () {
+							$jq(this).fadeTo("fast", 0);
+						}
+					);
+
 					// Display add user meta button as this JS is only loaded when a users meta is being shown
 					$jq('#umd-add-user-meta').css('display', 'inline-block');
 					$jq('.umd-remove-button').click(function () {
@@ -187,22 +217,23 @@ function umd_return_raw_data(){
 				});
 			</script>
 			<?php
-			echo '<table class="form-table">
+			echo '<table class="form-table umd-meta-table">
 				<thead>
 					<tr>
 						<th class="key-column">Key</th>
 						<th class="value-column">Value</th>
 					</tr>
 				</thead>
-				<tbody>';
+				<tbody class="umd-meta-table-body">';
 			foreach( $found_user_meta as $key => $value ) :
 					if ( apply_filters( 'umd_ignore_user_meta_key', false, $key ) )
 						continue;
 //						$value = var_export( $value, true );
 				echo '<tr class="umd-meta-row umd-metakey-' . esc_html( $key ) . '" data-metakey="' . esc_html( $key ) . '" data-userid="' . intval( $user_id ) . '">
 					<td class="key-column">
-					<a href="#" data-userid="' . intval( $user_id ) . '" data-metakey="' . esc_html( $key ) . '" class="umd-remove-' . esc_html( $key ) . ' umd-remove-button button button-primary hidden">Remove</a>
-					<a href="#" data-userid="' . intval( $user_id ) . '" data-metakey="' . esc_html( $key ) . '" class="umd-edit-' . esc_html( $key ) . ' umd-edit-button button hidden">Edit</a>' . esc_html( $key ) . '</td>
+					<div class="umd-metakey-buttons">
+						<a href="#" data-userid="' . intval( $user_id ) . '" data-metakey="' . esc_html( $key ) . '" class="umd-remove-' . esc_html( $key ) . ' umd-remove-button button button-primary">Remove</a>
+						<a href="#" data-userid="' . intval( $user_id ) . '" data-metakey="' . esc_html( $key ) . '" class="umd-edit-' . esc_html( $key ) . ' umd-edit-button button">Edit</a></div><div class="umd-metakey-value">' . esc_html( $key ) . '</div></td>
 					<td class="value-column"><code>' . esc_html( $value ) . '</code></td>
 				</tr>';
 			endforeach;

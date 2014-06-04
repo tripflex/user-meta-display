@@ -10,7 +10,7 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 		$jq('.umd-modal-body').css('display', 'none');
 	}
 
-	function umdUpdateUserData(user_id){
+	function umdUpdateUserData(user_id, scroll_to_metakey){
 		jQuery.ajax(ajaxurl, {
 			type: 'POST',
 			dataType: 'html',
@@ -27,6 +27,19 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 			},
 			success: function(data) {
 				jQuery('#user-meta-output-box').html(data);
+			},
+			complete: function () {
+				if (scroll_to_metakey) {
+					var scroll_to_selector = $jq('.umd-metakey-' + scroll_to_metakey);
+					var scroll_position = scroll_to_selector.offset().top;
+					$jq('html,body').animate({
+						scrollTop: scroll_position
+					});
+					scroll_to_selector.addClass('wp-ui-highlight').delay(200).fadeOut(100).fadeIn('slow').fadeOut(100).fadeIn('slow');
+					setTimeout(function(){
+						scroll_to_selector.removeClass('wp-ui-highlight');
+					}, 2000);
+				}
 			}
 		});
 	}

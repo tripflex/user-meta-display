@@ -151,7 +151,7 @@
 	padding: 2px;
 	}
 
-.umd-meta-row:hover {
+.umd-meta-table > .umd-meta-table-body > tr:hover {
 	background-color: #ccc;
 	}
 
@@ -213,3 +213,14 @@
 .wrap .submit {
 	display: none;
 }
+
+.umd-metakey-buttons {
+	position: absolute;
+	margin-left: -175px;
+	margin-top: -5px;
+	opacity: 0;
+	}
+
+.umd-metakey-buttons a {
+	padding: 0 9px 1px;
+	}

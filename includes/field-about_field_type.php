@@ -1,5 +1,5 @@
 <h3>User Meta Display</h3>
-<b>Version</b>: 1.2
+<b>Version</b>: 1.2.2
 <br>
 <br>
 Github Repo:<br><a href="https://github.com/tripflex/user-meta-display" target="_blank">

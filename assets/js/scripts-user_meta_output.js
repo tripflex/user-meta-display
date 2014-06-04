@@ -42,8 +42,8 @@ function umdModalFade(out){
 		}, 1000);
 		umdUnbindModalButtons();
 	}
-
 }
+
 function umdUpdateModalStatus(content, is_error){
 	var notice_class = 'umd-modal-notice-';
 	if(is_error) notice_class = notice_class + 'error';
@@ -52,12 +52,13 @@ function umdUpdateModalStatus(content, is_error){
 	$jq('.umd-modal-title').html('<div class="' + notice_class + '">' + content + '</div>');
 }
 function umdHideManageButtons(metakey, hide){
-	var metakey_class = '.umd-metakey-' + metakey;
+	var metakey_class;
+	if (metakey) metakey_class = '.umd-metakey-' + metakey + ' ';
 	if(hide){
-		$jq(metakey_class + ' .umd-remove-button').addClass('hidden');
-		$jq(metakey_class + ' .umd-edit-button').addClass('hidden');
+		$jq(metakey_class + '.umd-remove-button').delay(500).fadeOut('slow');
+		$jq(metakey_class + '.umd-edit-button').delay(500).fadeOut('slow');
 	} else {
-		$jq(metakey_class + ' .umd-remove-button').removeClass('hidden');
-		$jq(metakey_class + ' .umd-edit-button').removeClass('hidden');
+		$jq(metakey_class + '.umd-remove-button').fadeIn();
+		$jq(metakey_class + '.umd-edit-button').fadeIn();
 	}
 }
