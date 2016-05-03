@@ -8,7 +8,7 @@ function umd_remove_user_meta(){
 	check_ajax_referer( 'umd_remove_user_meta', 'security' );
 	$userid = $_POST['userid'];
 	$metakey = $_POST['metakey'];
-	$metavalue = $_POST['metavalue'];
+	$metavalue = maybe_unserialize( $_POST['metavalue'] );
 
 	$results = delete_user_meta( $userid, $metakey, $metavalue );
 
@@ -44,11 +44,17 @@ function umd_edit_user_meta(){
 	}
 	die;
 }
+
+function umd_return_first_array_item( $a ){
+	if( is_array( $a ) && isset( $a[0] ) ) return $a[0];
+	return '';
+}
+
 function umd_return_raw_data(){
 	check_ajax_referer( 'umd_return_raw_data', 'security' );
 	$user_id = intval($_POST['userid']);
 	if ($user_id && $user_id != -1) {
-		$found_user_meta = array_map( function( $a ){ return $a[0]; }, get_user_meta( $user_id ) );
+		$found_user_meta = array_map( "umd_return_first_array_item", get_user_meta( $user_id ) );
 		if($found_user_meta){
 			$umd_remove_user_meta = wp_create_nonce( 'umd_remove_user_meta' );
 			$umd_edit_user_meta = wp_create_nonce( 'umd_edit_user_meta' );
