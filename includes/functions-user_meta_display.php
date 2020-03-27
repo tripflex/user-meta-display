@@ -262,7 +262,7 @@ function umd_change_user_list_dropdown() {
 
 		if ($user_list_type == 1) {
 			// ID
-			$user_args = array('show' => 'ID', 'show_option_none' => 'Select User ID', 'class' => 'user-meta-display-user-dropdown');
+			$user_args = array('show' => 'ID', 'show_option_none' => 'Select User ID', 'class' => 'user-meta-display-user-dropdown', 'orderby' => 'ID');
 		} elseif ($user_list_type == 2){
 			// User Login
 			$user_args = array('show' => 'user_login', 'show_option_none' => 'Select User Login', 'class' => 'user-meta-display-user-dropdown');
