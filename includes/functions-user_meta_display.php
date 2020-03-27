@@ -164,6 +164,56 @@ function umd_return_raw_data(){
 
 					umdRemoveUserMeta(metakey, metavalue, userid);
 				}
+
+				function umdSearchKeyUserMetaConfirmed() {
+					umdSearchUserMeta('#umd-search-meta-key', '.key-column .umd-metakey-value');
+				}
+
+				function umdSearchValueUserMetaConfirmed() {
+					umdSearchUserMeta('#umd-search-meta-value', '.value-column code');
+				}
+
+				function umdSearchUserMeta(data_selector, column_selector){
+					var data = $jq(data_selector).val();
+					if(!data){
+						//do nothing
+						return;
+					}
+					let found = false;
+					$jq(column_selector).each(function(){
+						if($jq(this).html() == data){
+							umdModalHide();
+							scrollToElement($jq(this));
+							highlightElement($jq(this));
+							found = true;
+							return;
+						}
+					});
+					if(!found){
+						umdModalHide();
+						showNotFoundMessage();
+					}
+				}
+
+				function scrollToElement(jq_element){
+					var scroll_position = jq_element.offset().top - $jq('#wpadminbar').height();
+					$jq('html,body').animate({
+						scrollTop: scroll_position
+					});
+				}
+
+				function highlightElement(jq_element){
+					jq_element.addClass('wp-ui-highlight').delay(200).fadeOut(100).fadeIn('slow').fadeOut(100).fadeIn('slow');
+					setTimeout(function(){
+						jq_element.removeClass('wp-ui-highlight');
+					}, 2000);
+				}
+
+				function showNotFoundMessage(){
+					umdModalConfig("Meta not found.", '<br>', '', '', "Ok", umdModalHide, '', '');
+					umdModalShow();
+				}
+
 				jQuery(function ($jq) {
 //					$jq('.umd-meta-row, .umd-metakey-buttons').mouseenter(function () {
 ////					umdHideManageButtons(null, true);
@@ -171,6 +221,17 @@ function umd_return_raw_data(){
 //					}).mouseleave(function () {
 //						umdHideManageButtons($jq(this).data('metakey'), true);
 //					});
+
+					$jq('#umd-search-key-button').click(function () {
+						var modalKey = 'Key: <input type="text" id="umd-search-meta-key">';
+						umdModalConfig("Search for meta with key:", modalKey, '', '', "Search", umdSearchKeyUserMetaConfirmed, "Cancel", umdModalHide);
+						umdModalShow();
+					});
+					$jq('#umd-search-value-button').click(function () {
+						var modalValue = '<div class="umd-search-meta-value-title">Value:</div><textarea id="umd-search-meta-value" cols="3"></textarea>';
+						umdModalConfig("Search for meta with value:", '', modalValue, '', "Search", umdSearchValueUserMetaConfirmed, "Cancel", umdModalHide);
+						umdModalShow();
+					});
 
 					// Set row colors as normal CSS nth-child not supported in IE''
 					$jq(".umd-meta-table-body > tr:odd").css("background-color", "#F7F7F7").hover(
@@ -226,8 +287,8 @@ function umd_return_raw_data(){
 			echo '<table class="form-table umd-meta-table">
 				<thead>
 					<tr>
-						<th class="key-column">Key</th>
-						<th class="value-column">Value</th>
+						<th class="key-column">Key <span id="umd-search-key-button" class="dashicons dashicons-search"></span></th>
+						<th class="value-column">Value <span id="umd-search-value-button" class="dashicons dashicons-search"></span></th>
 					</tr>
 				</thead>
 				<tbody class="umd-meta-table-body">';

@@ -1,8 +1,10 @@
+#umd-search-meta-key,
 #umd-edit-meta-key {
 	font-size: 50%;
 	width: 75%;
 	}
 
+#umd-search-meta-value,
 #umd-edit-meta-value {
 	font-size: 100%;
 	width: 100%
@@ -11,6 +13,7 @@
 #umd-add-user-meta {
 	display: none;
 	}
+.umd-search-meta-value-title,
 .umd-edit-meta-value-title {
 	text-align: left;
 	color: #222222;
@@ -75,6 +78,10 @@
 	width: 40%;
 	}
 
+	.umd-modal-buttons > .button:empty{
+	display: none;
+	}
+
 .umd-modal-meta-value-wrap {
 	margin: 25px;
 	}
@@ -86,6 +93,10 @@
 	word-break: break-all;
 	word-wrap: break-word;
 	}
+
+.umd-modal-meta-value:empty {
+	display: none;
+	 }
 
 .umd-modal-close-corner {
 	position: absolute;
@@ -149,6 +160,20 @@
 	position: relative;
 	margin: 2px;
 	padding: 2px;
+	}
+
+#umd-search-key-button,
+#umd-search-value-button{
+	/* font-family: "dashicons";
+	content: "\f179";
+	padding-right: 5px;
+	margin-left: 5px;
+	vertical-align: middle; */
+	}
+#umd-search-key-button:hover,
+#umd-search-value-button:hover{
+	color: #007CBA;
+	cursor: pointer;
 	}
 
 .umd-meta-table > .umd-meta-table-body > tr:hover {
