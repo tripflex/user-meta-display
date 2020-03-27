@@ -162,14 +162,6 @@
 	padding: 2px;
 	}
 
-#umd-search-key-button,
-#umd-search-value-button{
-	/* font-family: "dashicons";
-	content: "\f179";
-	padding-right: 5px;
-	margin-left: 5px;
-	vertical-align: middle; */
-	}
 #umd-search-key-button:hover,
 #umd-search-value-button:hover{
 	color: #007CBA;
