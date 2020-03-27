@@ -31,7 +31,7 @@ $umd_change_user_list_dropdown = wp_create_nonce( 'umd_change_user_list_dropdown
 			complete: function () {
 				if (scroll_to_metakey) {
 					var scroll_to_selector = $jq('.umd-metakey-' + scroll_to_metakey);
-					var scroll_position = scroll_to_selector.offset().top;
+					var scroll_position = scroll_to_selector.offset().top - $jq('#wpadminbar').height();;
 					$jq('html,body').animate({
 						scrollTop: scroll_position
 					});
